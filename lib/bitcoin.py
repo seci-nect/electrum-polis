@@ -39,9 +39,9 @@ import pyaes
 import x11_hash
 
 
-# Dash and bip32, bip44 constants
-# https://github.com/dashpay/dash/blob/master/src/chainparams.cpp
-# https://github.com/dashpay/dash/ 0.11.0 Release notes for drkp/drkv/DRKP/DRKV
+# Polis and bip32, bip44 constants
+# https://github.com/polispay/polis/blob/master/src/chainparams.cpp
+# https://github.com/polispay/polis/ 0.11.0 Release notes for drkp/drkv/DRKP/DRKV
 # https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 TESTNET = False
 ADDRTYPE_P2PKH = 76

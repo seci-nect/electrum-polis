@@ -99,7 +99,7 @@ class WsClientThread(util.DaemonThread):
             params = r.get('params')
             result = r.get('result')
             if result is None:
-                continue    
+                continue
             if method == 'blockchain.address.subscribe':
                 self.network.send([('blockchain.address.get_balance', params)], self.response_queue.put)
             elif method == 'blockchain.address.get_balance':
@@ -125,10 +125,8 @@ class WebSocketServer(threading.Thread):
         t.start()
 
         host = self.config.get('websocket_server')
-        port = self.config.get('websocket_port', 9999)
+        port = self.config.get('websocket_port', 24126)
         certfile = self.config.get('ssl_chain')
         keyfile = self.config.get('ssl_privkey')
         self.server = SimpleSSLWebSocketServer(host, port, ElectrumWebSocket, certfile, keyfile)
         self.server.serveforever()
-
-

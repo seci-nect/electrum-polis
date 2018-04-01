@@ -1,32 +1,32 @@
 # Setup electrumx server with docker
 
-## 1. Setup dashd node with docker
+## 1. Setup polisd node with docker
 
-Used docker dashd image has `txindex=1` setting in dash.conf,
+Used docker polisd image has `txindex=1` setting in polis.conf,
 which is need by electrumx server.
 
 Create network to link with electrumx server.
 
 ```
-docker network create dash-mainnet
+docker network create polis-mainnet
 ```
 
-Create volume to store dashd data and settings.
+Create volume to store polisd data and settings.
 
 ```
-docker volume create dashd-data
+docker volume create polisd-data
 ```
 
-Start dashd container.
+Start polisd container.
 
 ```
-docker run --restart=always -v dashd-data:/dash \
-    --name=dashd-node --net dash-mainnet -d \
-    -p 9999:9999 -p 127.0.0.1:9998:9998 zebralucky/dashd
+docker run --restart=always -v polisd-data:/polis \
+    --name=polisd-node --net polis-mainnet -d \
+    -p 24126:24126 -p 127.0.0.1:9998:9998 zebralucky/polisd
 ```
 
 **Notes**:
- - port 9999 is published without bind to localhost and can be
+ - port 24126 is published without bind to localhost and can be
  accessible from out world even with firewall setup:
  https://github.com/moby/moby/issues/22054
 
@@ -34,17 +34,17 @@ Copy or change RPC password. Random password generated
 on first container startup.
 
 ```
-docker exec -it dashd-node bash -l
+docker exec -it polisd-node bash -l
 
 # ... login to container
 
-cat .dashcore/dash.conf | grep rpcpassword
+cat .poliscore/polis.conf | grep rpcpassword
 ```
 
-See log of dashd.
+See log of polisd.
 
 ```
-docker logs dashd-node
+docker logs polisd-node
 ```
 
 ## 2. Setup electrumx server with docker
@@ -52,18 +52,18 @@ docker logs dashd-node
 Create volume to store elextrumx server data and settings.
 
 ```
-docker volume create electrumx-dash-data
+docker volume create electrumx-polis-data
 ```
 
 Start elextrumx container.
 
 ```
-docker run --restart=always -v electrumx-dash-data:/data \
-    --name electrumx-dash --net dash-mainnet -d \
-    -p 50001:50001 -p 50002:50002 zebralucky/electrumx-dash:mainnet
+docker run --restart=always -v electrumx-polis-data:/data \
+    --name electrumx-polis --net polis-mainnet -d \
+    -p 50001:50001 -p 50002:50002 zebralucky/electrumx-polis:mainnet
 ```
 
-Change DAEMON_URL `rpcpasswd` to password from dashd and creaate SSL cert.
+Change DAEMON_URL `rpcpasswd` to password from polisd and creaate SSL cert.
 
 **Notes**:
  - DAEMON_URL as each URL can not contain some symbols.
@@ -72,7 +72,7 @@ Change DAEMON_URL `rpcpasswd` to password from dashd and creaate SSL cert.
  https://github.com/moby/moby/issues/22054
 
 ```
-docker exec -it electrumx-dash bash -l
+docker exec -it electrumx-polis bash -l
 
 # ... login to container
 
@@ -97,13 +97,13 @@ exit
 
 # Restart electrumx container to switch on new RPC password
 
-docker restart electrumx-dash
+docker restart electrumx-polis
 ```
 
 See log of electrumx server.
 
 ```
-docker exec -it electrumx-dash bash -l
+docker exec -it electrumx-polis bash -l
 
 # ... login to container
 
@@ -112,5 +112,5 @@ tail /data/log/current
 # or less /data/log/current
 ```
 
-Wait some time, when electrumx sync with dashd and
+Wait some time, when electrumx sync with polisd and
 starts listen on client ports. It can be seen on `/data/log/current`.

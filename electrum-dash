@@ -89,22 +89,22 @@ def check_imports():
 if not is_android:
     check_imports()
 
-# load local module as electrum_dash
+# load local module as electrum_polis
 if is_bundle or is_local or is_android:
     import imp
-    imp.load_module('electrum_dash', *imp.find_module('lib'))
-    imp.load_module('electrum_dash_gui', *imp.find_module('gui'))
+    imp.load_module('electrum_polis', *imp.find_module('lib'))
+    imp.load_module('electrum_polis_gui', *imp.find_module('gui'))
 
-from electrum_dash import bitcoin, network
-from electrum_dash import SimpleConfig, Network
-from electrum_dash.wallet import Wallet, Imported_Wallet
-from electrum_dash.storage import WalletStorage
-from electrum_dash.util import print_msg, print_stderr, json_encode, json_decode
-from electrum_dash.util import set_verbosity, InvalidPassword, check_www_dir
-from electrum_dash.commands import get_parser, known_commands, Commands, config_variables
-from electrum_dash import daemon
-from electrum_dash import keystore
-from electrum_dash.mnemonic import Mnemonic
+from electrum_polis import bitcoin, network
+from electrum_polis import SimpleConfig, Network
+from electrum_polis.wallet import Wallet, Imported_Wallet
+from electrum_polis.storage import WalletStorage
+from electrum_polis.util import print_msg, print_stderr, json_encode, json_decode
+from electrum_polis.util import set_verbosity, InvalidPassword, check_www_dir
+from electrum_polis.commands import get_parser, known_commands, Commands, config_variables
+from electrum_polis import daemon
+from electrum_polis import keystore
+from electrum_polis.mnemonic import Mnemonic
 
 # get password routine
 def prompt_password(prompt, confirm=True):
@@ -189,7 +189,7 @@ def init_daemon(config_options):
     storage = WalletStorage(config.get_wallet_path())
     if not storage.file_exists():
         print_msg("Error: Wallet file not found.")
-        print_msg("Type 'electrum-dash create' to create a new wallet, or provide a path to a wallet with the -w option")
+        print_msg("Type 'electrum-polis create' to create a new wallet, or provide a path to a wallet with the -w option")
         sys.exit(0)
     if storage.is_encrypted():
         if config.get('password'):
@@ -224,7 +224,7 @@ def init_cmdline(config_options, server):
 
     if cmd.requires_wallet and not storage.file_exists():
         print_msg("Error: Wallet file not found.")
-        print_msg("Type 'electrum-dash create' to create a new wallet, or provide a path to a wallet with the -w option")
+        print_msg("Type 'electrum-polis create' to create a new wallet, or provide a path to a wallet with the -w option")
         sys.exit(0)
 
     # important warning
@@ -291,7 +291,7 @@ def run_offline_command(config, config_options):
     return result
 
 def init_plugins(config, gui_name):
-    from electrum_dash.plugins import Plugins
+    from electrum_polis.plugins import Plugins
     return Plugins(config, is_bundle or is_local or is_android, gui_name)
 
 if __name__ == '__main__':
@@ -393,7 +393,7 @@ if __name__ == '__main__':
                 d = daemon.Daemon(config, fd, False)
                 d.start()
                 if config.get('websocket_server'):
-                    from electrum_dash import websockets
+                    from electrum_polis import websockets
                     websockets.WebSocketServer(config, d.network).start()
                 if config.get('requests_dir'):
                     check_www_dir(config.get('requests_dir'))
@@ -417,7 +417,7 @@ if __name__ == '__main__':
         else:
             cmd = known_commands[cmdname]
             if cmd.requires_network:
-                print_msg("Daemon not running; try 'electrum-dash daemon start'")
+                print_msg("Daemon not running; try 'electrum-polis daemon start'")
                 sys.exit(1)
             else:
                 init_plugins(config, 'cmdline')

@@ -27,10 +27,10 @@
 import webbrowser
 
 from util import *
-from electrum_dash.i18n import _
-from electrum_dash.util import block_explorer_URL, format_satoshis, format_time
-from electrum_dash.plugins import run_hook
-from electrum_dash.util import timestamp_to_datetime, profiler
+from electrum_polis.i18n import _
+from electrum_polis.util import block_explorer_URL, format_satoshis, format_time
+from electrum_polis.plugins import run_hook
+from electrum_polis.util import timestamp_to_datetime, profiler
 
 
 TX_ICONS = [

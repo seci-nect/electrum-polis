@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_REPO_URL=https://github.com/akhavr/electrum-dash.git
+BUILD_REPO_URL=https://github.com/akhavr/electrum-polis.git
 
 export PATH="/usr/local/opt/python@2/bin:$PATH"
 export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
@@ -9,13 +9,13 @@ cd build
 if [[ -z $TRAVIS_TAG ]]; then
   exit 0
 else
-  git clone --branch $TRAVIS_TAG $BUILD_REPO_URL electrum-dash
+  git clone --branch $TRAVIS_TAG $BUILD_REPO_URL electrum-polis
 fi
 
-cd electrum-dash
+cd electrum-polis
 
-source ./contrib/travis/electrum_dash_version_env.sh;
-echo wine build version is $ELECTRUM_DASH_VERSION
+source ./contrib/travis/electrum_polis_version_env.sh;
+echo wine build version is $ELECTRUM_POLIS_VERSION
 
 sudo pip2 install \
     dnspython==1.12.0 \
@@ -44,9 +44,9 @@ cp /usr/local/lib/python2.7/site-packages/requests/cacert.pem packages/requests/
 
 pyinstaller \
     -y \
-    --name electrum-dash-$ELECTRUM_DASH_VERSION.bin \
+    --name electrum-polis-$ELECTRUM_POLIS_VERSION.bin \
     osx.spec
 
-sudo hdiutil create -fs HFS+ -volname "Electrum-DASH" \
-    -srcfolder dist/Electrum-DASH.app \
-    dist/electrum-dash-$ELECTRUM_DASH_VERSION-macosx.dmg
+sudo hdiutil create -fs HFS+ -volname "Electrum-POLIS" \
+    -srcfolder dist/Electrum-POLIS.app \
+    dist/electrum-polis-$ELECTRUM_POLIS_VERSION-macosx.dmg

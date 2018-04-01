@@ -5,14 +5,14 @@ import threading
 from binascii import hexlify, unhexlify
 from functools import partial
 
-from electrum_dash.bitcoin import (bc_address_to_hash_160, xpub_from_pubkey,
+from electrum_polis.bitcoin import (bc_address_to_hash_160, xpub_from_pubkey,
                               public_key_to_p2pkh, EncodeBase58Check,
                               TYPE_ADDRESS, TYPE_SCRIPT,
                               TESTNET, ADDRTYPE_P2PKH, ADDRTYPE_P2SH)
-from electrum_dash.i18n import _
-from electrum_dash.plugins import BasePlugin, hook
-from electrum_dash.transaction import deserialize, Transaction
-from electrum_dash.keystore import Hardware_KeyStore, is_xpubkey, parse_xpubkey
+from electrum_polis.i18n import _
+from electrum_polis.plugins import BasePlugin, hook
+from electrum_polis.transaction import deserialize, Transaction
+from electrum_polis.keystore import Hardware_KeyStore, is_xpubkey, parse_xpubkey
 
 from ..hw_wallet import HW_PluginBase
 
@@ -136,7 +136,7 @@ class TrezorCompatiblePlugin(HW_PluginBase):
         return client
 
     def get_coin_name(self):
-        return "Dash Testnet" if TESTNET else "Dash"
+        return "Polis Testnet" if TESTNET else "Polis"
 
     def initialize_device(self, device_id, wizard, handler):
         # Initialization method

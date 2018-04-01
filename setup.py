@@ -12,7 +12,7 @@ import argparse
 version = imp.load_source('version', 'lib/version.py')
 
 if sys.version_info[:3] < (2, 7, 0):
-    sys.exit("Error: Electrum-DASH requires Python version >= 2.7.0...")
+    sys.exit("Error: Electrum-POLIS requires Python version >= 2.7.0...")
 
 data_files = []
 
@@ -28,12 +28,12 @@ if platform.system() in ['Linux', 'FreeBSD', 'DragonFly']:
         else:
             usr_share = os.path.expanduser('~/.local/share')
     data_files += [
-        (os.path.join(usr_share, 'applications/'), ['electrum-dash.desktop']),
-        (os.path.join(usr_share, 'pixmaps/'), ['icons/electrum-dash.png'])
+        (os.path.join(usr_share, 'applications/'), ['electrum-polis.desktop']),
+        (os.path.join(usr_share, 'pixmaps/'), ['icons/electrum-polis.png'])
     ]
 
 setup(
-    name="Electrum-DASH",
+    name="Electrum-POLIS",
     version=version.ELECTRUM_VERSION,
     install_requires=[
         'pyaes',
@@ -50,42 +50,42 @@ setup(
     ],
     dependency_links=[
         'git+https://github.com/akhavr/x11_hash@1.4#egg=x11_hash-1.4',
-        'git+https://github.com/electrum-dash/python-trezor@v0.6.13#egg=trezor',
+        'git+https://github.com/electrum-polis/python-trezor@v0.6.13#egg=trezor',
     ],
     packages=[
-        'electrum_dash',
-        'electrum_dash_gui',
-        'electrum_dash_gui.qt',
-        'electrum_dash_plugins',
-        'electrum_dash_plugins.audio_modem',
-        'electrum_dash_plugins.cosigner_pool',
-        'electrum_dash_plugins.email_requests',
-        'electrum_dash_plugins.hw_wallet',
-        'electrum_dash_plugins.keepkey',
-        'electrum_dash_plugins.labels',
-        'electrum_dash_plugins.ledger',
-        'electrum_dash_plugins.trezor',
-        'electrum_dash_plugins.digitalbitbox',
-        'electrum_dash_plugins.virtualkeyboard',
+        'electrum_polis',
+        'electrum_polis_gui',
+        'electrum_polis_gui.qt',
+        'electrum_polis_plugins',
+        'electrum_polis_plugins.audio_modem',
+        'electrum_polis_plugins.cosigner_pool',
+        'electrum_polis_plugins.email_requests',
+        'electrum_polis_plugins.hw_wallet',
+        'electrum_polis_plugins.keepkey',
+        'electrum_polis_plugins.labels',
+        'electrum_polis_plugins.ledger',
+        'electrum_polis_plugins.trezor',
+        'electrum_polis_plugins.digitalbitbox',
+        'electrum_polis_plugins.virtualkeyboard',
     ],
     package_dir={
-        'electrum_dash': 'lib',
-        'electrum_dash_gui': 'gui',
-        'electrum_dash_plugins': 'plugins',
+        'electrum_polis': 'lib',
+        'electrum_polis_gui': 'gui',
+        'electrum_polis_plugins': 'plugins',
     },
     package_data={
-        'electrum_dash': [
+        'electrum_polis': [
             'currencies.json',
             'www/index.html',
             'wordlist/*.txt',
             'locale/*/LC_MESSAGES/electrum.mo',
         ]
     },
-    scripts=['electrum-dash'],
+    scripts=['electrum-polis'],
     data_files=data_files,
-    description="Lightweight Dashpay Wallet",
+    description="Lightweight Polispay Wallet",
     author="akhavr",
     license="MIT License",
-    url="https://electrum-dash.org",
-    long_description="""Lightweight Dashpay Wallet"""
+    url="https://electrum-polis.org",
+    long_description="""Lightweight Polispay Wallet"""
 )
