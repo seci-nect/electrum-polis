@@ -44,15 +44,15 @@ import x11_hash
 # https://github.com/polispay/polis/ 0.11.0 Release notes for drkp/drkv/DRKP/DRKV
 # https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 TESTNET = False
-ADDRTYPE_P2PKH = 76
-ADDRTYPE_P2SH = 16
-WIF = 204
-XPRV_HEADER = 0x0488ade4
-XPUB_HEADER = 0x0488b21e
-DRKP_HEADER = 0x02fe52cc
-DRKV_HEADER = 0x02fe52f8
+ADDRTYPE_P2PKH = 55 # polis adress prefix 55
+ADDRTYPE_P2SH = 56 # polis scripts prefix 56
+WIF = 60 # polis private keys prefix 
+XPRV_HEADER = 0x0488ade4 # I think this are the same as bitcoin
+XPUB_HEADER = 0x0488b21e # I think this are the same as bitcoin
+DRKP_HEADER = 0x02fe52cc # I think this are the same as bitcoin 
+DRKV_HEADER = 0x02fe52f8 # I think this are the same as bitcoin
 HEADERS_URL = ''  # TODO headers bootstrap
-GENESIS = '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6'
+GENESIS = '000009701eb781a8113b1af1d814e2f060f6408a2c990db291bc5108a1345c1e'
 
 
 def set_testnet():
@@ -61,7 +61,7 @@ def set_testnet():
     global TESTNET, HEADERS_URL
     global GENESIS, DRKP_HEADER, DRKV_HEADER
     TESTNET = True
-    ADDRTYPE_P2PKH = 140
+    ADDRTYPE_P2PKH = 140 # polis dash address start with 140 / y
     ADDRTYPE_P2SH = 19
     WIF = 239
     XPRV_HEADER = 0x04358394
@@ -70,7 +70,8 @@ def set_testnet():
     DRKV_HEADER = 0x3a8061a0
     HEADERS_URL = ''  # TODO headers bootstrap
     GENESIS = '0000' + \
-              '0bafbc94add76cb75e2ec92894837288a481e5c005f6563d91623bf8bc2c'
+              '009038aeaea86784e959b0b4002793adad39fc9d6f8789ed2edf99ad5c8b'
+               
 
 
 ################################## transactions
