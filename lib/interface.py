@@ -209,6 +209,8 @@ class TcpConnection(threading.Thread, util.PrintError):
         socket = self.get_socket()
         if socket:
             self.print_error("connected")
+        else:
+            print("unable to connect")
         self.queue.put((self.server, socket))
 
 class Interface(util.PrintError):
