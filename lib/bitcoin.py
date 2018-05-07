@@ -47,10 +47,13 @@ TESTNET = False
 ADDRTYPE_P2PKH = 55 # polis adress prefix 55
 ADDRTYPE_P2SH = 56 # polis scripts prefix 56
 WIF = 60 # polis private keys prefix 
-XPRV_HEADER = 0x0488ade4 # I think this are the same as bitcoin
-XPUB_HEADER = 0x0488b21e # I think this are the same as bitcoin
-DRKP_HEADER = 0x02fe52cc # I think this are the same as bitcoin 
-DRKV_HEADER = 0x02fe52f8 # I think this are the same as bitcoin
+
+XPRV_HEADER = 0x0488ade4
+XPUB_HEADER = 0x0488b21e
+
+DRKP_HEADER = XPRV_HEADER
+DRKV_HEADER = XPUB_HEADER
+
 HEADERS_URL = ''  # TODO headers bootstrap
 GENESIS = '000009701eb781a8113b1af1d814e2f060f6408a2c990db291bc5108a1345c1e'
 

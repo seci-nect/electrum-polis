@@ -44,7 +44,7 @@ import blockchain
 from version import ELECTRUM_VERSION, PROTOCOL_VERSION
 import masternode_manager
 
-DEFAULT_PORTS = {'t':'50001', 's':'50002'}
+DEFAULT_PORTS = {'t':'50127', 's':'50128'}
 
 #There is a schedule to move the default list to e-x (electrumx) by Jan 2018
 #Schedule is as follows:
@@ -52,7 +52,7 @@ DEFAULT_PORTS = {'t':'50001', 's':'50002'}
 #then gradually switch remaining nodes to e-x nodes
 
 DEFAULT_SERVERS = {
-    'electrum.polis.siampm.com':DEFAULT_PORTS,  # thelazier
+    'electrum1.polispay.org':DEFAULT_PORTS,  # thelazier
     # cert verify failed 'electrum-drk.club':DEFAULT_PORTS,         # duffman
 }
 
