@@ -44,15 +44,18 @@ import x11_hash
 # https://github.com/polispay/polis/ 0.11.0 Release notes for drkp/drkv/DRKP/DRKV
 # https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 TESTNET = False
-ADDRTYPE_P2PKH = 76
-ADDRTYPE_P2SH = 16
-WIF = 204
+ADDRTYPE_P2PKH = 55
+ADDRTYPE_P2SH = 56
+WIF = 60
+
 XPRV_HEADER = 0x0488ade4
 XPUB_HEADER = 0x0488b21e
-DRKP_HEADER = 0x02fe52cc
-DRKV_HEADER = 0x02fe52f8
+
+DRKP_HEADER = XPRV_HEADER
+DRKV_HEADER = XPUB_HEADER
+
 HEADERS_URL = ''  # TODO headers bootstrap
-GENESIS = '00000ffd590b1485b3caadc19b22e6379c733355108f107a430458cdf3407ab6'
+GENESIS = '000009701eb781a8113b1af1d814e2f060f6408a2c990db291bc5108a1345c1e'
 
 
 def set_testnet():
