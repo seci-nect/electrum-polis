@@ -49,6 +49,7 @@ def Connection(server, queue, config_path):
     queue of the form (server, socket), where socket is None if
     connection failed.
     """
+    print(server)
     host, port, protocol = server.split(':')
     if not protocol in 'st':
         raise Exception('Unknown protocol: %s' % protocol)
