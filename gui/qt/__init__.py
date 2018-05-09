@@ -36,13 +36,13 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import PyQt4.QtCore as QtCore
 
-from electrum_polis.i18n import _, set_language
-from electrum_polis.plugins import run_hook
-from electrum_polis import SimpleConfig, Wallet, WalletStorage
-from electrum_polis.synchronizer import Synchronizer
-from electrum_polis.verifier import SPV
-from electrum_polis.util import DebugMem, UserCancelled, InvalidPassword
-from electrum_polis.wallet import Abstract_Wallet
+from electrum.i18n import _, set_language
+from electrum.plugins import run_hook
+from electrum import SimpleConfig, Wallet, WalletStorage
+from electrum.synchronizer import Synchronizer
+from electrum.verifier import SPV
+from electrum.util import DebugMem, UserCancelled, InvalidPassword
+from electrum.wallet import Abstract_Wallet
 from installwizard import InstallWizard, GoBack
 from polis_style import polis_stylesheet
 

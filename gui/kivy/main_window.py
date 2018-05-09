@@ -7,15 +7,15 @@ import traceback
 from decimal import Decimal
 import threading
 
-import electrum_polis
-from electrum_polis.bitcoin import TYPE_ADDRESS
-from electrum_polis import WalletStorage, Wallet
-from electrum_polis_gui.kivy.i18n import _
-from electrum_polis.paymentrequest import InvoiceStore
-from electrum_polis.util import profiler, InvalidPassword
-from electrum_polis.plugins import run_hook
-from electrum_polis.util import format_satoshis, format_satoshis_plain
-from electrum_polis.paymentrequest import PR_UNPAID, PR_PAID, PR_UNKNOWN, PR_EXPIRED
+import electrum
+from electrum.bitcoin import TYPE_ADDRESS
+from electrum import WalletStorage, Wallet
+from electrum_gui.kivy.i18n import _
+from electrum.paymentrequest import InvoiceStore
+from electrum.util import profiler, InvalidPassword
+from electrum.plugins import run_hook
+from electrum.util import format_satoshis, format_satoshis_plain
+from electrum.paymentrequest import PR_UNPAID, PR_PAID, PR_UNKNOWN, PR_EXPIRED
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -31,10 +31,10 @@ from kivy.lang import Builder
 
 # lazy imports for factory so that widgets can be used in kv
 Factory.register('InstallWizard',
-                 module='electrum_polis_gui.kivy.uix.dialogs.installwizard')
-Factory.register('InfoBubble', module='electrum_polis_gui.kivy.uix.dialogs')
-Factory.register('OutputList', module='electrum_polis_gui.kivy.uix.dialogs')
-Factory.register('OutputItem', module='electrum_polis_gui.kivy.uix.dialogs')
+                 module='electrum_gui.kivy.uix.dialogs.installwizard')
+Factory.register('InfoBubble', module='electrum_gui.kivy.uix.dialogs')
+Factory.register('OutputList', module='electrum_gui.kivy.uix.dialogs')
+Factory.register('OutputItem', module='electrum_gui.kivy.uix.dialogs')
 
 
 #from kivy.core.window import Window
@@ -55,7 +55,7 @@ from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.label import Label
 from kivy.core.clipboard import Clipboard
 
-Factory.register('TabbedCarousel', module='electrum_polis_gui.kivy.uix.screens')
+Factory.register('TabbedCarousel', module='electrum_gui.kivy.uix.screens')
 
 # Register fonts without this you won't be able to use bold/italic...
 # inside markup.
@@ -67,7 +67,7 @@ Label.register('Roboto',
                'gui/kivy/data/fonts/Roboto-Bold.ttf')
 
 
-from electrum_polis.util import base_units
+from electrum.util import base_units
 
 
 class ElectrumWindow(App):
@@ -95,7 +95,7 @@ class ElectrumWindow(App):
         from uix.dialogs.choice_dialog import ChoiceDialog
         protocol = 's'
         def cb2(host):
-            from electrum_polis.network import DEFAULT_PORTS
+            from electrum.network import DEFAULT_PORTS
             pp = servers.get(host, DEFAULT_PORTS)
             port = pp.get(protocol, '')
             popup.ids.host.text = host
@@ -291,7 +291,7 @@ class ElectrumWindow(App):
             self.send_screen.do_clear()
 
     def on_qr(self, data):
-        from electrum_polis.bitcoin import base_decode, is_address
+        from electrum.bitcoin import base_decode, is_address
         data = data.strip()
         if is_address(data):
             self.set_URI(data)
@@ -300,7 +300,7 @@ class ElectrumWindow(App):
             self.set_URI(data)
             return
         # try to decode transaction
-        from electrum_polis.transaction import Transaction
+        from electrum.transaction import Transaction
         try:
             text = base_decode(data, None, base=43).encode('hex')
             tx = Transaction(text)
@@ -337,7 +337,7 @@ class ElectrumWindow(App):
         self.receive_screen.screen.address = addr
 
     def show_pr_details(self, req, status, is_invoice):
-        from electrum_polis.util import format_time
+        from electrum.util import format_time
         requestor = req.get('requestor')
         exp = req.get('exp')
         memo = req.get('memo')
@@ -565,9 +565,9 @@ class ElectrumWindow(App):
 
         #setup lazy imports for mainscreen
         Factory.register('AnimatedPopup',
-                         module='electrum_polis_gui.kivy.uix.dialogs')
+                         module='electrum_gui.kivy.uix.dialogs')
         Factory.register('QRCodeWidget',
-                         module='electrum_polis_gui.kivy.uix.qrcodewidget')
+                         module='electrum_gui.kivy.uix.qrcodewidget')
 
         # preload widgets. Remove this if you want to load the widgets on demand
         #Cache.append('electrum_widgets', 'AnimatedPopup', Factory.AnimatedPopup())

@@ -23,7 +23,7 @@ def _new_load_module(name, file, pathname, description):
 imp.load_module = _new_load_module
 
 
-PLUGINS_PREFIX = 'electrum_polis_plugins'
+PLUGINS_PREFIX = 'electrum_plugins'
 
 KEYSTORE_PLUGINS = [
     'hw_wallet',

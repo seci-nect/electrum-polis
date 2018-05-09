@@ -3,10 +3,10 @@ import webbrowser
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
-from electrum_polis.i18n import _
-from electrum_polis.masternode_budget import BudgetProposal, BudgetVote
-from electrum_polis.masternode_manager import BUDGET_FEE_CONFIRMATIONS
-from electrum_polis.util import block_explorer_URL, print_error, format_satoshis_plain
+from electrum.i18n import _
+from electrum.masternode_budget import BudgetProposal, BudgetVote
+from electrum.masternode_manager import BUDGET_FEE_CONFIRMATIONS
+from electrum.util import block_explorer_URL, print_error, format_satoshis_plain
 
 from amountedit import BTCAmountEdit
 import util

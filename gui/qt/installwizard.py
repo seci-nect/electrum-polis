@@ -5,11 +5,11 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import PyQt4.QtCore as QtCore
 
-import electrum_polis
-from electrum_polis import Wallet, WalletStorage
-from electrum_polis.util import UserCancelled, InvalidPassword
-from electrum_polis.base_wizard import BaseWizard
-from electrum_polis.i18n import _
+import electrum
+from electrum import Wallet, WalletStorage
+from electrum.util import UserCancelled, InvalidPassword
+from electrum.base_wizard import BaseWizard
+from electrum.i18n import _
 
 from seed_dialog import SeedLayout, KeysLayout
 from network_dialog import NetworkChoiceLayout

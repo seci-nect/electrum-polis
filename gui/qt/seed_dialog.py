@@ -25,7 +25,7 @@
 
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-from electrum_polis.i18n import _
+from electrum.i18n import _
 
 from util import *
 from qrtextedit import ShowQRTextEdit, ScanQRTextEdit
@@ -139,7 +139,7 @@ class SeedLayout(QVBoxLayout):
         return ' '.join(text.split())
 
     def on_edit(self):
-        from electrum_polis.bitcoin import seed_type
+        from electrum.bitcoin import seed_type
         s = self.get_seed()
         b = self.is_seed(s)
         t = seed_type(s)

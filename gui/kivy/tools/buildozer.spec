@@ -7,7 +7,7 @@ title = Electrum-POLIS
 package.name = Electrum-POLIS
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.electrum_polis.electrum_polis_develop
+package.domain = org.electrum.electrum_develop
 
 # (str) Source code where the main.py live
 source.dir = .
