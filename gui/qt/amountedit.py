@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import (QLineEdit, QStyle, QStyleOptionFrame)
 
 from decimal import Decimal
-from electrum.util import format_satoshis_plain
+from electrum.util import format_satoshis_plain, decimal_point_to_base_unit_name
+
 
 class MyLineEdit(QLineEdit):
     frozen = pyqtSignal()
@@ -31,7 +33,7 @@ class AmountEdit(MyLineEdit):
         return 8
 
     def numbify(self):
-        text = unicode(self.text()).strip()
+        text = self.text().strip()
         if text == '!':
             self.shortcut.emit()
             return
@@ -53,7 +55,7 @@ class AmountEdit(MyLineEdit):
     def paintEvent(self, event):
         QLineEdit.paintEvent(self, event)
         if self.base_unit:
-            panel = QStyleOptionFrameV2()
+            panel = QStyleOptionFrame()
             self.initStyleOption(panel)
             textRect = self.style().subElementRect(QStyle.SE_LineEditContents, panel, self)
             textRect.adjust(2, 0, -10, 0)
@@ -67,6 +69,9 @@ class AmountEdit(MyLineEdit):
         except:
             return None
 
+    def setAmount(self, x):
+        self.setText("%d"%x)
+
 
 class BTCAmountEdit(AmountEdit):
 
@@ -75,15 +80,7 @@ class BTCAmountEdit(AmountEdit):
         self.decimal_point = decimal_point
 
     def _base_unit(self):
-        p = self.decimal_point()
-        assert p in [2, 5, 8]
-        if p == 8:
-            return 'POLIS'
-        if p == 5:
-            return 'mPOLIS'
-        if p == 2:
-            return 'uPOLIS'
-        raise Exception('Unknown base unit')
+        return decimal_point_to_base_unit_name(self.decimal_point())
 
     def get_amount(self):
         try:
@@ -99,6 +96,13 @@ class BTCAmountEdit(AmountEdit):
         else:
             self.setText(format_satoshis_plain(amount, self.decimal_point()))
 
-class BTCkBEdit(BTCAmountEdit):
+
+class FeerateEdit(BTCAmountEdit):
     def _base_unit(self):
-        return BTCAmountEdit._base_unit(self) + '/kB'
+        return 'sat/byte'
+
+    def get_amount(self):
+        sat_per_byte_amount = BTCAmountEdit.get_amount(self)
+        if sat_per_byte_amount is None:
+            return None
+        return 1000 * sat_per_byte_amount

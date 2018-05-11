@@ -17,19 +17,16 @@ from kivy.lang import Builder
 from kivy.factory import Factory
 from kivy.utils import platform
 
-from electrum.util import (profiler, parse_URI, format_time,
-                                InvalidPassword, NotEnoughFunds)
+from electrum.util import profiler, parse_URI, format_time, InvalidPassword, NotEnoughFunds, Fiat
 from electrum import bitcoin
 from electrum.util import timestamp_to_datetime
 from electrum.paymentrequest import PR_UNPAID, PR_PAID, PR_UNKNOWN, PR_EXPIRED
 
-from context_menu import ContextMenu
+from .context_menu import ContextMenu
 
 
 from electrum_gui.kivy.i18n import _
 
-class EmptyLabel(Factory.Label):
-    pass
 
 class CScreen(Factory.Screen):
     __events__ = ('on_activate', 'on_deactivate', 'on_enter', 'on_leave')
@@ -88,9 +85,9 @@ class CScreen(Factory.Screen):
         self.add_widget(self.context_menu)
 
 
+# note: this list needs to be kept in sync with another in qt
 TX_ICONS = [
-    "close",
-    "close",
+    "unconfirmed",
     "close",
     "unconfirmed",
     "close",
@@ -121,7 +118,7 @@ class HistoryScreen(CScreen):
         self.app.tx_dialog(tx)
 
     def label_dialog(self, obj):
-        from dialogs.label_dialog import LabelDialog
+        from .dialogs.label_dialog import LabelDialog
         key = obj.tx_hash
         text = self.app.wallet.get_label(key)
         def callback(text):
@@ -144,14 +141,16 @@ class HistoryScreen(CScreen):
         ri.icon = icon
         ri.date = status_str
         ri.message = label
-        ri.value = value or 0
-        ri.amount = self.app.format_amount(value, True) if value is not None else '--'
         ri.confirmations = conf
-        if self.app.fiat_unit and date:
-            rate = self.app.fx.history_rate(date)
-            if rate:
-                s = self.app.fx.value_str(value, rate)
-                ri.quote_text = '' if s is None else s + ' ' + self.app.fiat_unit
+        if value is not None:
+            ri.is_mine = value < 0
+            if value < 0: value = - value
+            ri.amount = self.app.format_amount_and_units(value)
+            if self.app.fiat_unit:
+                fx = self.app.fx
+                fiat_value = value / Decimal(bitcoin.COIN) * self.app.wallet.price_at_timestamp(tx_hash, fx.timestamp_rate)
+                fiat_value = Fiat(fiat_value, fx.ccy)
+                ri.quote_text = str(fiat_value)
         return ri
 
     def update(self, see_all=False):
@@ -163,12 +162,7 @@ class HistoryScreen(CScreen):
         count = 0
         for item in history:
             ri = self.get_card(*item)
-            count += 1
             history_card.add_widget(ri)
-
-        if count == 0:
-            msg = _('This screen shows your list of transactions. It is currently empty.')
-            history_card.add_widget(EmptyLabel(text=msg))
 
 
 class SendScreen(CScreen):
@@ -216,7 +210,7 @@ class SendScreen(CScreen):
         if not self.screen.address:
             return
         if self.screen.is_pr:
-            # it sould be already saved
+            # it should be already saved
             return
         # save address as invoice
         from electrum.paymentrequest import make_unsigned_request, PaymentRequest
@@ -226,7 +220,6 @@ class SendScreen(CScreen):
         pr = make_unsigned_request(req).SerializeToString()
         pr = PaymentRequest(pr)
         self.app.wallet.invoices.add(pr)
-        self.app.update_tab('invoices')
         self.app.show_info(_("Invoice saved"))
         if pr.is_pr():
             self.screen.is_pr = True
@@ -236,7 +229,7 @@ class SendScreen(CScreen):
             self.payment_request = None
 
     def do_paste(self):
-        contents = unicode(self.app._clipboard.paste())
+        contents = self.app._clipboard.paste()
         if not contents:
             self.app.show_info(_("Clipboard is empty"))
             return
@@ -262,11 +255,16 @@ class SendScreen(CScreen):
                 self.app.show_error(_('Invalid amount') + ':\n' + self.screen.amount)
                 return
             outputs = [(bitcoin.TYPE_ADDRESS, address, amount)]
-        message = unicode(self.screen.message)
+        message = self.screen.message
         amount = sum(map(lambda x:x[2], outputs))
-        self._do_send(amount, message, outputs)
+        if self.app.electrum_config.get('use_rbf'):
+            from .dialogs.question import Question
+            d = Question(_('Should this transaction be replaceable?'), lambda b: self._do_send(amount, message, outputs, b))
+            d.open()
+        else:
+            self._do_send(amount, message, outputs, False)
 
-    def _do_send(self, amount, message, outputs):
+    def _do_send(self, amount, message, outputs, rbf):
         # make unsigned transaction
         config = self.app.electrum_config
         coins = self.app.wallet.get_spendable_coins(None, config)
@@ -279,6 +277,8 @@ class SendScreen(CScreen):
             traceback.print_exc(file=sys.stdout)
             self.app.show_error(str(e))
             return
+        if rbf:
+            tx.set_rbf(True)
         fee = tx.get_fee()
         msg = [
             _("Amount to be sent") + ": " + self.app.format_amount_and_units(amount),
@@ -290,10 +290,12 @@ class SendScreen(CScreen):
         self.app.protected('\n'.join(msg), self.send_tx, (tx, message))
 
     def send_tx(self, tx, message, password):
+        if self.app.wallet.has_password() and password is None:
+            return
         def on_success(tx):
             if tx.is_complete():
                 self.app.broadcast(tx, self.payment_request)
-                self.app.wallet.set_label(tx.hash(), message)
+                self.app.wallet.set_label(tx.txid(), message)
             else:
                 self.app.tx_dialog(tx)
         def on_failure(error):
@@ -338,7 +340,7 @@ class ReceiveScreen(CScreen):
         req = self.app.wallet.get_payment_request(addr, self.app.electrum_config)
         self.screen.status = ''
         if req:
-            self.screen.message = unicode(req.get('memo', ''))
+            self.screen.message = req.get('memo', '')
             amount = req.get('amount')
             self.screen.amount = self.app.format_amount_and_units(amount) if amount else ''
             status = req.get('status', PR_UNKNOWN)
@@ -370,16 +372,24 @@ class ReceiveScreen(CScreen):
         self.app.show_info(_('Request copied to clipboard'))
 
     def save_request(self):
-        addr = str(self.screen.address)
-        amount = str(self.screen.amount)
-        message = unicode(self.screen.message)
+        addr = self.screen.address
+        if not addr:
+            return False
+        amount = self.screen.amount
+        message = self.screen.message
         amount = self.app.get_amount(amount) if amount else 0
         req = self.app.wallet.make_payment_request(addr, amount, message, None)
-        self.app.wallet.add_payment_request(req, self.app.electrum_config)
-        self.app.update_tab('requests')
+        try:
+            self.app.wallet.add_payment_request(req, self.app.electrum_config)
+            added_request = True
+        except Exception as e:
+            self.app.show_error(_('Error adding payment request') + ':\n' + str(e))
+            added_request = False
+        finally:
+            self.app.update_tab('requests')
+        return added_request
 
     def on_amount_or_message(self):
-        self.save_request()
         Clock.schedule_once(lambda dt: self.update_qr())
 
     def do_new(self):
@@ -389,6 +399,10 @@ class ReceiveScreen(CScreen):
         else:
             self.save_request()
             self.app.show_info(_('New request added to your list.'))
+
+    def do_save(self):
+        if self.save_request():
+            self.app.show_info(_('Request was saved.'))
 
 
 invoice_text = {
@@ -539,9 +553,6 @@ class RequestsScreen(CScreen):
         d = Question(_('Delete request?'), cb)
         d.open()
 
-
-
-
 class TabbedCarousel(Factory.TabbedPanel):
     '''Custom TabbedPanel using a carousel used in the Main Screen
     '''
@@ -601,7 +612,7 @@ class TabbedCarousel(Factory.TabbedPanel):
         self.current_tab.state = "normal"
         header.state = 'down'
         self._current_tab = header
-        # set the carousel to load  the appropriate slide
+        # set the carousel to load the appropriate slide
         # saved in the screen attribute of the tab head
         slide = carousel.slides[header.slide]
         if carousel.current_slide != slide:
