@@ -48,8 +48,8 @@ ADDRTYPE_P2PKH = 55 # polis adress prefix 55
 ADDRTYPE_P2SH = 56 # polis scripts prefix 56
 WIF = 60 # polis private keys prefix
 
-XPRV_HEADER = 0x04b2ade4
-XPUB_HEADER = 0x04b2b21e
+XPRV_HEADER = 0x03e25945
+XPUB_HEADER = 0x03e25d7e
 
 DRKP_HEADER = XPRV_HEADER
 DRKV_HEADER = XPUB_HEADER
