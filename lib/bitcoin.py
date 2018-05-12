@@ -46,10 +46,10 @@ import x11_hash
 TESTNET = False
 ADDRTYPE_P2PKH = 55 # polis adress prefix 55
 ADDRTYPE_P2SH = 56 # polis scripts prefix 56
-WIF = 60 # polis private keys prefix 
+WIF = 60 # polis private keys prefix
 
-XPRV_HEADER = 0x0488ade4
-XPUB_HEADER = 0x0488b21e
+XPRV_HEADER = 0x04b2ade4
+XPUB_HEADER = 0x04b2b21e
 
 DRKP_HEADER = XPRV_HEADER
 DRKV_HEADER = XPUB_HEADER
@@ -74,7 +74,7 @@ def set_testnet():
     HEADERS_URL = ''  # TODO headers bootstrap
     GENESIS = '0000' + \
               '009038aeaea86784e959b0b4002793adad39fc9d6f8789ed2edf99ad5c8b'
-               
+
 
 
 ################################## transactions
