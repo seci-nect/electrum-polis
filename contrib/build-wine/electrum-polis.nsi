@@ -1,6 +1,6 @@
 ;--------------------------------
 ;Include Modern UI
-  !include "TextFunc.nsh" ;Needed for the $GetSize fuction. I know, doesn't sound logical, it isn't.
+  !include "TextFunc.nsh" ;Needed for the $GetSize function. I know, doesn't sound logical, it isn't.
   !include "MUI2.nsh"
   
 ;--------------------------------
@@ -71,7 +71,6 @@
 
   !define MUI_ABORTWARNING
   !define MUI_ABORTWARNING_TEXT "Are you sure you wish to abort the installation of ${PRODUCT_NAME}?"
-  
   !define MUI_ICON "icons\electrum-polis.ico"
   
 ;--------------------------------
@@ -108,7 +107,6 @@ Section
   RMDir /r "$INSTDIR\*.*"
   Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
   Delete "$SMPROGRAMS\${PRODUCT_NAME}\*.*"
-
   ;Files to pack into the installer
   File /r "dist\electrum-polis\*.*"
   File "icons\electrum-polis.ico"
@@ -136,7 +134,7 @@ Section
   WriteRegStr HKCU "Software\Classes\polis" "DefaultIcon" "$\"$INSTDIR\electrum-polis.ico, 0$\""
   WriteRegStr HKCU "Software\Classes\polis\shell\open\command" "" "$\"$INSTDIR\electrum-polis-${PRODUCT_VERSION}.exe$\" $\"%1$\""
 
-  ;Adds an uninstaller possibilty to Windows Uninstall or change a program section
+  ;Adds an uninstaller possibility to Windows Uninstall or change a program section
   WriteRegStr HKCU "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
   WriteRegStr HKCU "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\Uninstall.exe"
   WriteRegStr HKCU "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 matrix:
   include:
   - if: tag =~ .+
@@ -15,8 +16,8 @@ matrix:
         - libusb-1.0-0-dev
         - libudev-dev
 before_install:
-- source contrib/travis/electrum_polis_version_env.sh
-- echo electrum-polis version is $ELECTRUM_POLIS_VERSION
+- source contrib/travis/electrum_version_env.sh
+- echo electrum-polis version is $electrum_VERSION
 - mkdir -p build && cp contrib/travis/* ./build/ && if [[ $TRAVIS_OS_NAME == 'osx'
   ]]; then ./build/before_install-osx.sh ; else ./build/before_install-linux.sh ;
   fi
@@ -35,7 +36,7 @@ deploy:
   api_key:
     secure: uzEWbVBDu/KZLtWmNWbdD/m9FHzMSiHEogEzTiRcxf/zJ/41mrRyJb13j4VK7TCfxyDC3LjPVR65/VKTaGSl5bXKq8RBBT03fOQqV511fwLkTIdz5vgWbqNNZQJAp4JyCgTLqJaklvE41winMFJzyrI1Ukkq/PKpA+c88xz6NR5fl9EJpnm7JrtIkQAs5P4aGMijUft0hGYpBgd+jMSG1WssRFFaWsg99i3EEn8vkVqPLpCal1WxcfQMUPG9cv8MV6m1jfoPExi/pwFzsD93ZVgjlqnPyqyRrfmZj1tilx2p3xZIjVvwTrDaYsYiVfIfiAPBw2cb4nSBRWVsGD0tITXJ7yzetagnJZoC4Jo8koiU4sfRttlj4XU2cFP4ameF3KhlWXF0NoHcqZ3bC+94QAhh/7T4cE9qi8lhrbcsTy0XAPf93377vH6ZFL1hTe9J9NHtDf5PSH01xVIP0NNaWoAUdDkaso5PL3U1v2D0C9ISco2suALHOby7WJ9PjjGiHq8B1cojUCEdExaXormaYu/khJxgT1p2JouhC8NFYdTYXSsylBqBhdHu9subjuwmst61CXem2wNkTdtCAfMdHx6474bmPyHxxS7WYuYbIcuvIK/Mk2kDnURdPuDBF4o8EF2CqEGCkp2Ue63GpJDH6xB1OgKdPxHcwKGwhfxJulc=
   file:
-  - build/electrum-polis/dist/electrum-polis-$ELECTRUM_POLIS_VERSION-macosx.dmg
+  - build/electrum-polis/dist/electrum-polis-$electrum_VERSION-macosx.dmg
   on:
     repo: akhavr/electrum-polis
     tags: true
@@ -44,8 +45,8 @@ deploy:
   api_key:
     secure: uzEWbVBDu/KZLtWmNWbdD/m9FHzMSiHEogEzTiRcxf/zJ/41mrRyJb13j4VK7TCfxyDC3LjPVR65/VKTaGSl5bXKq8RBBT03fOQqV511fwLkTIdz5vgWbqNNZQJAp4JyCgTLqJaklvE41winMFJzyrI1Ukkq/PKpA+c88xz6NR5fl9EJpnm7JrtIkQAs5P4aGMijUft0hGYpBgd+jMSG1WssRFFaWsg99i3EEn8vkVqPLpCal1WxcfQMUPG9cv8MV6m1jfoPExi/pwFzsD93ZVgjlqnPyqyRrfmZj1tilx2p3xZIjVvwTrDaYsYiVfIfiAPBw2cb4nSBRWVsGD0tITXJ7yzetagnJZoC4Jo8koiU4sfRttlj4XU2cFP4ameF3KhlWXF0NoHcqZ3bC+94QAhh/7T4cE9qi8lhrbcsTy0XAPf93377vH6ZFL1hTe9J9NHtDf5PSH01xVIP0NNaWoAUdDkaso5PL3U1v2D0C9ISco2suALHOby7WJ9PjjGiHq8B1cojUCEdExaXormaYu/khJxgT1p2JouhC8NFYdTYXSsylBqBhdHu9subjuwmst61CXem2wNkTdtCAfMdHx6474bmPyHxxS7WYuYbIcuvIK/Mk2kDnURdPuDBF4o8EF2CqEGCkp2Ue63GpJDH6xB1OgKdPxHcwKGwhfxJulc=
   file:
-  - build/electrum-polis/dist/Electrum-POLIS-$ELECTRUM_POLIS_VERSION.tar.gz
-  - build/electrum-polis/dist/electrum-polis-$ELECTRUM_POLIS_VERSION-setup.exe
+  - build/electrum-polis/dist/Electrum-POLIS-$electrum_VERSION.tar.gz
+  - build/electrum-polis/dist/electrum-polis-$electrum_VERSION-setup.exe
   on:
     repo: akhavr/electrum-polis
     tags: true
@@ -53,3 +54,36 @@ deploy:
 notifications:
   slack:
     secure: g2tFyXklhL4WOD/jQ8nxiOBqVv2F26iE4aVgvpclQ/9Fnh6jXEk3jCXyMqt39fcbB4Hka2wPr4n5uWH3tRaChFpwK5LQS5vuymllloqdxAShgIXXciZ1k/Ka1K+mxMEPJriQm4MT5AvzcLVSkJ0i5LYW8nWgG7+fTEullWS4hlPLC77C36iK2CWDaxfFqqe8oPTdsCVbik8HQ62ZWDM6Sh6TZbQD7F9eUBmiwwQhRB2BMxPkWghwQ//FRJ+PIpg7PtWRru/JjNg3adOsHnwlltqUVAolacZCbpxDKFR+GLpYmLkMrwdnVA7apZ2In/yo25ByAkxshCgw45lmGB0dtC1zeAe3Get9eGP5w3o9Zedj5T5esX0BNArDK70C+kTXcPeJaRRQJPrs5OYXRPKjD+uiJqe1fIFSmhdM6vvuMPdyA1z0Fd0/9G2O/Qi8tFxcFmM8n6JQGfD9ojOQF8fPYcHM9gsOgNU9J2PfV3RnRtv3VZogxs4azKG2M8JhD/lwqZBNi4FgdllW6NE7+5TB2KX07xy/zx0m81u8k6J228sAuiRsUBcpmW7pqlqLIENMzwV8pDcA93Ps0EWJKWbzRi+hIEkBnaFE9WHY0GcKuW0TCrnonZ4FOnJNO/G9HzxvQ97bcJDvhUloJ2pBBsH0P4IZ1RlDXFpc5DqTT2qxZSo=
+=======
+sudo: false
+language: python
+python:
+    - 3.5
+    - 3.6
+install:
+  - pip install -r contrib/requirements/requirements-travis.txt
+cache:
+  - pip: true
+  - directories:
+    - /tmp/electrum-build
+script:
+    - tox
+after_success:
+    - if [ "$TRAVIS_BRANCH" = "master" ]; then pip install pycurl requests && contrib/make_locale; fi
+    - coveralls
+jobs:
+  include:
+    - stage: windows build
+      sudo: true
+      python: 3.5
+      install:
+        - sudo dpkg --add-architecture i386
+        - wget -nc https://dl.winehq.org/wine-builds/Release.key
+        - sudo apt-key add Release.key
+        - sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
+        - sudo apt-get update -qq
+        - sudo apt-get install -qq winehq-stable dirmngr gnupg2 p7zip-full
+      before_script: ls -lah /tmp/electrum-build
+      script: ./contrib/build-wine/build.sh
+      after_success: true
+>>>>>>> bitcoinElectrum/master

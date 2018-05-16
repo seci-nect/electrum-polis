@@ -1,0 +1,2 @@
+git+https://github.com/akhavr/x11_hash@1.4#egg=x11_hash-1.4
+git+https://github.com/electrum-polis/python-trezor@v0.6.13#egg=trezor

@@ -7,30 +7,29 @@ import traceback
 
 import base64
 
-import electrum_polis
-from electrum_polis.plugins import BasePlugin, hook
-from electrum_polis.i18n import _
-
-
+import electrum
+from electrum.plugins import BasePlugin, hook
+from electrum.i18n import _
 
 
 class LabelsPlugin(BasePlugin):
 
     def __init__(self, parent, config, name):
         BasePlugin.__init__(self, parent, config, name)
-        self.target_host = 'labels.bauerj.eu'
+        #self.target_host = 'labels.bauerj.eu'
+        self.target_host = 'labels.electrum.org'
         self.wallets = {}
 
     def encode(self, wallet, msg):
         password, iv, wallet_id = self.wallets[wallet]
-        encrypted = electrum_polis.bitcoin.aes_encrypt_with_iv(password, iv,
+        encrypted = electrum.bitcoin.aes_encrypt_with_iv(password, iv,
                                                          msg.encode('utf8'))
-        return base64.b64encode(encrypted)
+        return base64.b64encode(encrypted).decode()
 
     def decode(self, wallet, message):
         password, iv, wallet_id = self.wallets[wallet]
         decoded = base64.b64decode(message)
-        decrypted = electrum_polis.bitcoin.aes_decrypt_with_iv(password,
+        decrypted = electrum.bitcoin.aes_decrypt_with_iv(password,
                                                               iv, decoded)
         return decrypted.decode('utf8')
 
@@ -48,7 +47,9 @@ class LabelsPlugin(BasePlugin):
 
     @hook
     def set_label(self, wallet, item, label):
-        if not wallet in self.wallets:
+        if wallet not in self.wallets:
+            return
+        if not item:
             return
         nonce = self.get_nonce(wallet)
         wallet_id = self.wallets[wallet][2]
@@ -56,7 +57,7 @@ class LabelsPlugin(BasePlugin):
                   "walletNonce": nonce,
                   "externalId": self.encode(wallet, item),
                   "encryptedLabel": self.encode(wallet, label)}
-        t = threading.Thread(target=self.do_request,
+        t = threading.Thread(target=self.do_request_safe,
                              args=["POST", "/label", False, bundle])
         t.setDaemon(True)
         t.start()
@@ -73,18 +74,28 @@ class LabelsPlugin(BasePlugin):
             kwargs['headers']['Content-Type'] = 'application/json'
         response = requests.request(method, url, **kwargs)
         if response.status_code != 200:
-            raise BaseException(response.status_code, response.text)
+            raise Exception(response.status_code, response.text)
         response = response.json()
         if "error" in response:
-            raise BaseException(response["error"])
+            raise Exception(response["error"])
         return response
 
+    def do_request_safe(self, *args, **kwargs):
+        try:
+            self.do_request(*args, **kwargs)
+        except BaseException as e:
+            #traceback.print_exc(file=sys.stderr)
+            self.print_error('error doing request')
+
     def push_thread(self, wallet):
-        wallet_id = self.wallets[wallet][2]
+        wallet_data = self.wallets.get(wallet, None)
+        if not wallet_data:
+            raise Exception('Wallet {} not loaded'.format(wallet))
+        wallet_id = wallet_data[2]
         bundle = {"labels": [],
                   "walletId": wallet_id,
                   "walletNonce": self.get_nonce(wallet)}
-        for key, value in wallet.labels.iteritems():
+        for key, value in wallet.labels.items():
             try:
                 encoded_key = self.encode(wallet, key)
                 encoded_value = self.encode(wallet, value)
@@ -96,42 +107,47 @@ class LabelsPlugin(BasePlugin):
         self.do_request("POST", "/labels", True, bundle)
 
     def pull_thread(self, wallet, force):
-        wallet_id = self.wallets[wallet][2]
+        wallet_data = self.wallets.get(wallet, None)
+        if not wallet_data:
+            raise Exception('Wallet {} not loaded'.format(wallet))
+        wallet_id = wallet_data[2]
         nonce = 1 if force else self.get_nonce(wallet) - 1
         self.print_error("asking for labels since nonce", nonce)
+        response = self.do_request("GET", ("/labels/since/%d/for/%s" % (nonce, wallet_id) ))
+        if response["labels"] is None:
+            self.print_error('no new labels')
+            return
+        result = {}
+        for label in response["labels"]:
+            try:
+                key = self.decode(wallet, label["externalId"])
+                value = self.decode(wallet, label["encryptedLabel"])
+            except:
+                continue
+            try:
+                json.dumps(key)
+                json.dumps(value)
+            except:
+                self.print_error('error: no json', key)
+                continue
+            result[key] = value
+
+        for key, value in result.items():
+            if force or not wallet.labels.get(key):
+                wallet.labels[key] = value
+
+        self.print_error("received %d labels" % len(response))
+        # do not write to disk because we're in a daemon thread
+        wallet.storage.put('labels', wallet.labels)
+        self.set_nonce(wallet, response["nonce"] + 1)
+        self.on_pulled(wallet)
+
+    def pull_thread_safe(self, wallet, force):
         try:
-            response = self.do_request("GET", ("/labels/since/%d/for/%s" % (nonce, wallet_id) ))
-            if response["labels"] is None:
-                self.print_error('no new labels')
-                return
-            result = {}
-            for label in response["labels"]:
-                try:
-                    key = self.decode(wallet, label["externalId"])
-                    value = self.decode(wallet, label["encryptedLabel"])
-                except:
-                    continue
-                try:
-                    json.dumps(key)
-                    json.dumps(value)
-                except:
-                    self.print_error('error: no json', key)
-                    continue
-                result[key] = value
-
-            for key, value in result.items():
-                if force or not wallet.labels.get(key):
-                    wallet.labels[key] = value
-
-            self.print_error("received %d labels" % len(response))
-            # do not write to disk because we're in a daemon thread
-            wallet.storage.put('labels', wallet.labels)
-            self.set_nonce(wallet, response["nonce"] + 1)
-            self.on_pulled(wallet)
-
-        except Exception as e:
-            traceback.print_exc(file=sys.stderr)
-            self.print_error("could not retrieve labels")
+            self.pull_thread(wallet, force)
+        except BaseException as e:
+            # traceback.print_exc(file=sys.stderr)
+            self.print_error('could not retrieve labels')
 
     def start_wallet(self, wallet):
         nonce = self.get_nonce(wallet)
@@ -139,12 +155,13 @@ class LabelsPlugin(BasePlugin):
         mpk = wallet.get_fingerprint()
         if not mpk:
             return
-        password = hashlib.sha1(mpk).digest().encode('hex')[:32]
+        mpk = mpk.encode('ascii')
+        password = hashlib.sha1(mpk).hexdigest()[:32].encode('ascii')
         iv = hashlib.sha256(password).digest()[:16]
-        wallet_id = hashlib.sha256(mpk).digest().encode('hex')
+        wallet_id = hashlib.sha256(mpk).hexdigest()
         self.wallets[wallet] = (password, iv, wallet_id)
         # If there is an auth token we can try to actually start syncing
-        t = threading.Thread(target=self.pull_thread, args=(wallet, False))
+        t = threading.Thread(target=self.pull_thread_safe, args=(wallet, False))
         t.setDaemon(True)
         t.start()
 

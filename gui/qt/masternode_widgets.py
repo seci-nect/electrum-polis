@@ -3,10 +3,10 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
-from electrum_polis import bitcoin
-from electrum_polis.bitcoin import COIN
-from electrum_polis.i18n import _
-from electrum_polis.masternode import NetworkAddress, MasternodeAnnounce
+from electrum import bitcoin
+from electrum.bitcoin import COIN
+from electrum.i18n import _
+from electrum.masternode import NetworkAddress, MasternodeAnnounce
 
 import util
 
