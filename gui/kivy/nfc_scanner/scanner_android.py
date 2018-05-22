@@ -10,7 +10,7 @@ if platform != 'android':
     raise ImportError
 import threading
 
-from electrum_polis_gui.kivy.nfc_scanner import NFCBase
+from electrum_dash_gui.kivy.nfc_scanner import NFCBase
 from jnius import autoclass, cast
 from android.runnable import run_on_ui_thread
 from android import activity
@@ -46,7 +46,7 @@ class ScannerAndroid(NFCBase):
         global app
         app = App.get_running_app()
 
-        # Make sure we are listening to new intent 
+        # Make sure we are listening to new intent
         activity.bind(on_new_intent=self.on_new_intent)
 
         # Configure nfc
@@ -55,7 +55,7 @@ class ScannerAndroid(NFCBase):
         # Check if adapter exists
         if not self.nfc_adapter:
             return False
-        
+
         # specify that we want our activity to remain on top whan a new intent
         # is fired
         self.nfc_pending_intent = PendingIntent.getActivity(context, 0,
@@ -123,7 +123,7 @@ class ScannerAndroid(NFCBase):
 
             details['recTypes'] = recTypes
         except Exception as err:
-            print str(err)
+            print(str(err))
 
         return details
 
@@ -131,7 +131,7 @@ class ScannerAndroid(NFCBase):
         ''' This functions is called when the application receives a
         new intent, for the ones the application has registered previously,
         either in the manifest or in the foreground dispatch setup in the
-        nfc_init function above. 
+        nfc_init function above.
         '''
 
         action_list = (NfcAdapter.ACTION_NDEF_DISCOVERED,)
@@ -141,7 +141,7 @@ class ScannerAndroid(NFCBase):
         #details = self.get_ndef_details(tag)
 
         if intent.getAction() not in action_list:
-            print 'unknow action, avoid.'
+            print('unknow action, avoid.')
             return
 
         rawmsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
@@ -150,7 +150,7 @@ class ScannerAndroid(NFCBase):
         for message in rawmsgs:
             message = cast(NdefMessage, message)
             payload = message.getRecords()[0].getPayload()
-            print 'payload: {}'.format(''.join(map(chr, payload)))
+            print('payload: {}'.format(''.join(map(chr, payload))))
 
     def nfc_disable(self):
         '''Disable app from handling tags.
@@ -165,21 +165,20 @@ class ScannerAndroid(NFCBase):
     def create_AAR(self):
         '''Create the record responsible for linking our application to the tag.
         '''
-        return NdefRecord.createApplicationRecord(
-            JString("org.electrum_polis.electrum_polis_develop.kivy"))
+        return NdefRecord.createApplicationRecord(JString("org.dash.electrum.kivy"))
 
     def create_TNF_EXTERNAL(self, data):
         '''Create our actual payload record.
         '''
         if BUILDVERSION >= 14:
-            domain = "org.electrum_polis.electrum_polis_develop"
+            domain = "org.dash.electrum"
             stype = "externalType"
             extRecord = NdefRecord.createExternal(domain, stype, data)
         else:
             # Creating the NdefRecord manually:
             extRecord = NdefRecord(
                 NdefRecord.TNF_EXTERNAL_TYPE,
-                "org.electrum_polis_electrum_polis.electrum_polis_develop:externalType",
+                "org.dash.electrum:externalType",
                 '',
                 data)
         return extRecord
@@ -214,8 +213,8 @@ class ScannerAndroid(NFCBase):
         # Create record
         ndef_record = NdefRecord(
                 NdefRecord.TNF_MIME_MEDIA,
-                'org.electrum_polis.electrum_polis_develop.kivy', '', data)
-        
+                'org.dash.electrum.kivy', '', data)
+
         # Create message
         ndef_message = NdefMessage([ndef_record])
 

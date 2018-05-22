@@ -1,14 +1,15 @@
 """Masternode-related widgets."""
 
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
-from electrum_polis import bitcoin
-from electrum_polis.bitcoin import COIN
-from electrum_polis.i18n import _
-from electrum_polis.masternode import NetworkAddress, MasternodeAnnounce
+from electrum_dash import bitcoin
+from electrum_dash.bitcoin import COIN
+from electrum_dash.i18n import _
+from electrum_dash.masternode import NetworkAddress, MasternodeAnnounce
 
-import util
+from . import util
 
 def masternode_status(status):
     """Get a human-friendly representation of status.
@@ -88,11 +89,11 @@ class PrevOutWidget(QWidget):
         super(PrevOutWidget, self).__init__(parent)
         self.vin = {}
         self.hash_edit = QLineEdit()
-        self.hash_edit.setPlaceholderText(_('The TxID of your 1000 POLIS output'))
+        self.hash_edit.setPlaceholderText(_('The TxID of your 1000 DASH output'))
         self.index_edit = QLineEdit()
-        self.index_edit.setPlaceholderText(_('The output number of your 1000 POLIS output'))
+        self.index_edit.setPlaceholderText(_('The output number of your 1000 DASH output'))
         self.address_edit = QLineEdit()
-        self.address_edit.setPlaceholderText(_('The address that 1000 POLIS was sent to'))
+        self.address_edit.setPlaceholderText(_('The address that 1000 DASH was sent to'))
 
         # Collection of fields so that it's easier to act on them all at once.
         self.fields = (self.hash_edit, self.index_edit, self.address_edit)
@@ -192,7 +193,7 @@ class MasternodeEditor(QWidget):
         form = QFormLayout()
         form.addRow(_('Alias:'), self.alias_edit)
         form.addRow(_('Status:'), self.status_edit)
-        form.addRow(_('Collateral POLIS Output:'), self.vin_edit)
+        form.addRow(_('Collateral DASH Output:'), self.vin_edit)
         form.addRow(_('Masternode Private Key:'), self.delegate_key_edit)
         form.addRow(_('Address:'), self.addr_edit)
         form.addRow(_('Protocol Version:'), self.protocol_version_edit)
@@ -231,7 +232,7 @@ class MasternodeOutputsWidget(QListWidget):
         self.addItem(item)
 
     def add_outputs(self, outputs):
-        map(self.add_output, outputs)
+        list(map(self.add_output, outputs))
         self.setCurrentRow(0)
 
     def clear(self):
@@ -273,7 +274,7 @@ class MasternodeOutputsTab(QWidget):
         self.mapper.setModel(self.dialog.masternodes_widget.proxy_model)
 
         model = self.dialog.masternodes_widget.model
-        self.mapper.addMapping(self.collateral_edit, model.VIN, 'string')
+        self.mapper.addMapping(self.collateral_edit, model.VIN, b'string')
 
         self.save_output_button = QPushButton(_('Save'))
         self.save_output_button.setEnabled(False)
@@ -283,7 +284,7 @@ class MasternodeOutputsTab(QWidget):
         vbox = QVBoxLayout()
 
         desc = ' '.join(['Use this tab to scan for and choose a collateral payment for your masternode.',
-            'A valid collateral payment is exactly 1000 POLIS.'])
+            'A valid collateral payment is exactly 1000 DASH.'])
         desc = QLabel(_(desc))
         desc.setWordWrap(True)
         vbox.addWidget(desc)
@@ -307,20 +308,19 @@ class MasternodeOutputsTab(QWidget):
         self.setLayout(vbox)
 
     def scan_for_outputs(self, include_frozen):
-        """Scan for 1000 POLIS outputs.
+        """Scan for 1000 DASH outputs.
 
         If one or more is found, populate the list and enable the sign button.
         """
         self.valid_outputs_list.clear()
         exclude_frozen = not include_frozen
-
-        coins = self.manager.get_masternode_outputs(exclude_frozen=exclude_frozen)
+        coins = list(self.manager.get_masternode_outputs(exclude_frozen=exclude_frozen))
 
         if len(coins) > 0:
             self.valid_outputs_list.add_outputs(coins)
         else:
-            self.status_edit.setText(_('No 1000 POLIS outputs were found.'))
-            self.status_edit.setStyleSheet(util.RED_FG)
+            self.status_edit.setText(_('No 1000 DASH outputs were found.'))
+            self.status_edit.setStyleSheet(util.ColorScheme.RED.as_stylesheet())
 
     def set_output(self, vin):
         """Set the selected output."""
@@ -337,7 +337,7 @@ class MasternodeOutputsTab(QWidget):
         """Set the row that the data widget mapper should use."""
         self.valid_outputs_list.clear()
         self.status_edit.clear()
-        self.status_edit.setStyleSheet(util.BLACK_FG)
+        self.status_edit.setStyleSheet(util.ColorScheme.DEFAULT.as_stylesheet())
         self.mapper.setCurrentIndex(row)
         mn = self.dialog.masternodes_widget.masternode_for_row(row)
 
@@ -378,7 +378,7 @@ class SignAnnounceWidget(QWidget):
 
         model = self.dialog.masternodes_widget.model
         self.mapper.addMapping(self.alias_edit, model.ALIAS)
-        self.mapper.addMapping(self.collateral_edit, model.VIN, 'string')
+        self.mapper.addMapping(self.collateral_edit, model.VIN, b'string')
         self.mapper.addMapping(self.delegate_edit, model.DELEGATE)
 
         self.sign_button = QPushButton(_('Activate Masternode'))
@@ -395,7 +395,7 @@ class SignAnnounceWidget(QWidget):
 
         form = QFormLayout()
         form.addRow(_('Alias:'), self.alias_edit)
-        form.addRow(_('Collateral POLIS Output:'), self.collateral_edit)
+        form.addRow(_('Collateral DASH Output:'), self.collateral_edit)
         form.addRow(_('Masternode Private Key:'), self.delegate_edit)
         vbox.addLayout(form)
         vbox.addLayout(util.Buttons(self.sign_button))
@@ -404,7 +404,7 @@ class SignAnnounceWidget(QWidget):
     def set_mapper_index(self, row):
         """Set the row that the data widget mapper should use."""
         self.status_edit.clear()
-        self.status_edit.setStyleSheet(util.BLACK_FG)
+        self.status_edit.setStyleSheet(util.ColorScheme.DEFAULT.as_stylesheet())
         self.mapper.setCurrentIndex(row)
         mn = self.dialog.masternodes_widget.masternode_for_row(row)
 
@@ -424,4 +424,3 @@ class SignAnnounceWidget(QWidget):
         """Set the masternode's vin and sign an announcement."""
         self.mapper.submit()
         self.dialog.sign_announce(str(self.alias_edit.text()))
-

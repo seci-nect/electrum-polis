@@ -1,4 +1,4 @@
-Electrum-POLIS - Lightweight Polis client
+Electrum-POLIS - Lightweight Dashpay client
 =====================================
 
 ::
@@ -6,10 +6,10 @@ Electrum-POLIS - Lightweight Polis client
   Licence: MIT Licence
   Author: Thomas Voegtlin
   Language: Python
-  Homepage: https://electrum-polis.org/
+  Homepage: https://electrum.polis.org/
 
 
-.. image:: https://travis-ci.org/akhavr/electrum-polis.svg?branch=develop
+.. image:: https://travis-ci.org/akhavr/electrum-polis.svg?branch=master
     :target: https://travis-ci.org/akhavr/electrum-polis
     :alt: Build Status
 
@@ -23,18 +23,25 @@ Getting started
 Electrum-POLIS is a pure python application. If you want to use the
 Qt interface, install the Qt dependencies::
 
-    sudo apt-get install python-qt4
+    sudo apt-get install python3-pyqt5
 
 If you downloaded the official package (tar.gz), you can run
 Electrum-POLIS from its root directory, without installing it on your
 system; all the python dependencies are included in the 'packages'
-directory. To run Electrum-POLIS from its root directory, just do::
+directory (except x11-hash).
+
+To install x11-hash dependency in the 'packages' dir run once::
+
+    pip3 install -t packages x11-hash
+
+To run Electrum-POLIS from its root directory, just do::
 
     ./electrum-polis
 
 You can also install Electrum-POLIS on your system, by running this command::
 
-    python setup.py install
+    sudo apt-get install python3-setuptools
+    python3 setup.py install
 
 This will download and install the Python dependencies used by
 Electrum-POLIS, instead of using the 'packages' directory.
@@ -50,17 +57,17 @@ Development version
 
 Check out the code from Github::
 
-    git clone https://github.com/akhavr/electrum-polis
+    git clone https://github.com/akhavr/electrum-polis.git
     cd electrum-polis
 
 Run install (this should install dependencies)::
 
-    python setup.py install
+    python3 setup.py install
 
 Compile the icons file for Qt::
 
-    sudo apt-get install pyqt4-dev-tools
-    pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+    sudo apt-get install pyqt5-dev-tools
+    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
 
 Compile the protobuf description file::
 
@@ -83,20 +90,20 @@ To create binaries, create the 'packages' directory::
 
     ./contrib/make_packages
 
-This directory contains the python dependencies used by Electrum.
+This directory contains the python dependencies used by Electrum-POLIS.
 
-Mac OS X
+Mac OS X / macOS
 --------
 
 ::
 
     # On MacPorts installs:
-    sudo python setup-release.py py2app
+    sudo python3 setup-release.py py2app
 
     # On Homebrew installs:
-    ARCHFLAGS="-arch i386 -arch x86_64" sudo python setup-release.py py2app --includes sip
+    ARCHFLAGS="-arch i386 -arch x86_64" sudo python3 setup-release.py py2app --includes sip
 
-    sudo hdiutil create -fs HFS+ -volname "Electrum" -srcfolder dist/Electrum.app dist/electrum-VERSION-macosx.dmg
+    sudo hdiutil create -fs HFS+ -volname "Electrum-POLIS" -srcfolder dist/Electrum-POLIS.app dist/electrum-VERSION-macosx.dmg
 
 Windows
 -------

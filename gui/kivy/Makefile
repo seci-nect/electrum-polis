@@ -1,4 +1,4 @@
-PYTHON = python
+PYTHON = python3
 
 # needs kivy installed or in PYTHONPATH
 
@@ -9,8 +9,8 @@ theming:
 prepare:
 	# running pre build setup
 	@cp tools/buildozer.spec ../../buildozer.spec
-	# copy electrum to main.py
-	@cp ../../electrum ../../main.py
+	# copy electrum-dash to main.py
+	@cp ../../electrum-dash ../../main.py
 	@-if [ ! -d "../../.buildozer" ];then \
 		cd ../..; buildozer android debug;\
 		cp -f gui/kivy/tools/blacklist.txt .buildozer/android/platform/python-for-android/src/blacklist.txt;\
@@ -26,7 +26,7 @@ release:
 	@make clean
 clean:
 	# Cleaning up
-	# rename main.py to electrum
+	# rename main.py to electrum-dash
 	@-rm ../../main.py
 	# remove buildozer.spec
 	@-rm ../../buildozer.spec

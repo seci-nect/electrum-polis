@@ -23,8 +23,6 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from __future__ import absolute_import
-
 import time
 import threading
 import base64
@@ -33,21 +31,20 @@ from functools import partial
 import smtplib
 import imaplib
 import email
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEBase import MIMEBase
-from email import Encoders
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email.encoders import encode_base64
 
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
-import PyQt4.QtCore as QtCore
-import PyQt4.QtGui as QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+import PyQt5.QtGui as QtGui
+from PyQt5.QtWidgets import (QVBoxLayout, QLabel, QGridLayout, QLineEdit)
 
-from electrum_polis.plugins import BasePlugin, hook
-from electrum_polis.paymentrequest import PaymentRequest
-from electrum_polis.i18n import _
-from electrum_polis_gui.qt.util import EnterButton, Buttons, CloseButton
-from electrum_polis_gui.qt.util import OkButton, WindowModalDialog
-
+from electrum_dash.plugins import BasePlugin, hook
+from electrum_dash.paymentrequest import PaymentRequest
+from electrum_dash.i18n import _
+from electrum_dash_gui.qt.util import EnterButton, Buttons, CloseButton
+from electrum_dash_gui.qt.util import OkButton, WindowModalDialog
 
 
 class Processor(threading.Thread):
@@ -75,7 +72,7 @@ class Processor(threading.Thread):
                 p = [p]
                 continue
             for item in p:
-                if item.get_content_type() == "application/polis-paymentrequest":
+                if item.get_content_type() == "application/dash-paymentrequest":
                     pr_str = item.get_payload()
                     pr_str = base64.b64decode(pr_str)
                     self.on_receive(pr_str)
@@ -94,15 +91,19 @@ class Processor(threading.Thread):
         msg['Subject'] = message
         msg['To'] = recipient
         msg['From'] = self.username
-        part = MIMEBase('application', "polis-paymentrequest")
+        part = MIMEBase('application', "dash-paymentrequest")
         part.set_payload(payment_request)
-        Encoders.encode_base64(part)
-        part.add_header('Content-Disposition', 'attachment; filename="payreq.polis"')
+        encode_base64(part)
+        part.add_header('Content-Disposition', 'attachment; filename="payreq.dash"')
         msg.attach(part)
         s = smtplib.SMTP_SSL(self.imap_server, timeout=2)
         s.login(self.username, self.password)
         s.sendmail(self.username, [recipient], msg.as_string())
         s.quit()
+
+
+class QEmailSignalObject(QObject):
+    email_new_invoice_signal = pyqtSignal()
 
 
 class Plugin(BasePlugin):
@@ -124,13 +125,13 @@ class Plugin(BasePlugin):
         if self.imap_server and self.username and self.password:
             self.processor = Processor(self.imap_server, self.username, self.password, self.on_receive)
             self.processor.start()
-        self.obj = QObject()
-        self.obj.connect(self.obj, SIGNAL('email:new_invoice'), self.new_invoice)
+        self.obj = QEmailSignalObject()
+        self.obj.email_new_invoice_signal.connect(self.new_invoice)
 
     def on_receive(self, pr_str):
         self.print_error('received payment request')
         self.pr = PaymentRequest(pr_str)
-        self.obj.emit(SIGNAL('email:new_invoice'))
+        self.obj.email_new_invoice_signal.emit()
 
     def new_invoice(self):
         self.parent.invoices.add(self.pr)
@@ -142,7 +143,7 @@ class Plugin(BasePlugin):
         menu.addAction(_("Send via e-mail"), lambda: self.send(window, addr))
 
     def send(self, window, addr):
-        from electrum_polis import paymentrequest
+        from electrum_dash import paymentrequest
         r = window.wallet.receive_requests.get(addr)
         message = r.get('memo', '')
         if r.get('signature'):
