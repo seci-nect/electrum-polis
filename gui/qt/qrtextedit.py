@@ -1,11 +1,9 @@
+from electrum_polis.i18n import _
+from electrum_polis.plugins import run_hook
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 
-from electrum.i18n import _
-from electrum.plugins import run_hook
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QFileDialog
-
-from .util import ButtonsTextEdit, MessageBoxMixin, ColorScheme
+from util import ButtonsTextEdit, MessageBoxMixin
 
 
 class ShowQRTextEdit(ButtonsTextEdit):
@@ -18,11 +16,11 @@ class ShowQRTextEdit(ButtonsTextEdit):
         run_hook('show_text_edit', self)
 
     def qr_show(self):
-        from .qrcodewidget import QRDialog
+        from qrcodewidget import QRDialog
         try:
             s = str(self.toPlainText())
         except:
-            s = self.toPlainText()
+            s = unicode(self.toPlainText())
         QRDialog(s).exec_()
 
     def contextMenuEvent(self, e):
@@ -33,41 +31,31 @@ class ShowQRTextEdit(ButtonsTextEdit):
 
 class ScanQRTextEdit(ButtonsTextEdit, MessageBoxMixin):
 
-    def __init__(self, text="", allow_multi=False):
+    def __init__(self, text=""):
         ButtonsTextEdit.__init__(self, text)
-        self.allow_multi = allow_multi
         self.setReadOnly(0)
         self.addButton(":icons/file.png", self.file_input, _("Read file"))
-        icon = ":icons/qrcode_white.png" if ColorScheme.dark_scheme else ":icons/qrcode.png"
-        self.addButton(icon, self.qr_input, _("Read QR code"))
+        self.addButton(":icons/qrcode.png", self.qr_input, _("Read QR code"))
         run_hook('scan_text_edit', self)
 
     def file_input(self):
-        fileName, __ = QFileDialog.getOpenFileName(self, 'select file')
+        fileName = unicode(QFileDialog.getOpenFileName(self, 'select file'))
         if not fileName:
             return
-        try:
-            with open(fileName, "r") as f:
-                data = f.read()
-        except BaseException as e:
-            self.show_error(_('Error opening file') + ':\n' + str(e))
-        else:
-            self.setText(data)
+        with open(fileName, "r") as f:
+            data = f.read()
+        self.setText(data)
 
     def qr_input(self):
-        from electrum import qrscanner, get_config
+        from electrum_polis import qrscanner, get_config
         try:
             data = qrscanner.scan_barcode(get_config().get_video_device())
         except BaseException as e:
             self.show_error(str(e))
             data = ''
-        if not data:
+        if type(data) != str:
             data = ''
-        if self.allow_multi:
-            new_text = self.text() + data + '\n'
-        else:
-            new_text = data
-        self.setText(new_text)
+        self.setText(data)
         return data
 
     def contextMenuEvent(self, e):

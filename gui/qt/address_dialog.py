@@ -23,16 +23,15 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from electrum.i18n import _
+from electrum_polis.i18n import _
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+import PyQt4
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 
-from .util import *
-from .history_list import HistoryList
-from .qrtextedit import ShowQRTextEdit
-
+from util import *
+from history_list import HistoryList
+from qrtextedit import ShowQRTextEdit
 
 class AddressDialog(WindowModalDialog):
 
@@ -52,8 +51,7 @@ class AddressDialog(WindowModalDialog):
         vbox.addWidget(QLabel(_("Address:")))
         self.addr_e = ButtonsLineEdit(self.address)
         self.addr_e.addCopyButton(self.app)
-        icon = ":icons/qrcode_white.png" if ColorScheme.dark_scheme else ":icons/qrcode.png"
-        self.addr_e.addButton(icon, self.show_qr, _("Show QR Code"))
+        self.addr_e.addButton(":icons/qrcode.png", self.show_qr, _("Show QR Code"))
         self.addr_e.setReadOnly(True)
         vbox.addWidget(self.addr_e)
 
@@ -93,6 +91,6 @@ class AddressDialog(WindowModalDialog):
     def show_qr(self):
         text = self.address
         try:
-            self.parent.show_qrcode(text, 'Address', parent=self)
+            self.parent.show_qrcode(text, 'Address')
         except Exception as e:
             self.show_message(str(e))

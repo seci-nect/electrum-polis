@@ -1,13 +1,15 @@
-#from btchip.btchipPersoWizard import StartBTChipPersoDialog
+import threading
 
-from electrum.i18n import _
-from electrum.plugins import hook
-from electrum.wallet import Standard_Wallet
-from electrum_gui.qt.util import *
+from PyQt4.Qt import (QDialog, QInputDialog, QLineEdit,
+                      QVBoxLayout, QLabel, SIGNAL)
+import PyQt4.QtCore as QtCore
 
+from electrum_polis.i18n import _
 from .ledger import LedgerPlugin
 from ..hw_wallet.qt import QtHandlerBase, QtPluginBase
+from electrum_polis_gui.qt.util import *
 
+from btchip.btchipPersoWizard import StartBTChipPersoDialog
 
 class Plugin(LedgerPlugin, QtPluginBase):
     icon_unpaired = ":icons/ledger_unpaired.png"
@@ -15,16 +17,6 @@ class Plugin(LedgerPlugin, QtPluginBase):
 
     def create_handler(self, window):
         return Ledger_Handler(window)
-
-    @hook
-    def receive_menu(self, menu, addrs, wallet):
-        if type(wallet) is not Standard_Wallet:
-            return
-        keystore = wallet.get_keystore()
-        if type(keystore) == self.keystore_class and len(addrs) == 1:
-            def show_address():
-                keystore.thread.add(partial(self.show_address, wallet, addrs[0]))
-            menu.addAction(_("Show on Ledger"), show_address)
 
 class Ledger_Handler(QtHandlerBase):
     setup_signal = pyqtSignal()
@@ -75,7 +67,11 @@ class Ledger_Handler(QtHandlerBase):
         return 
         
     def setup_dialog(self):
-        self.show_error(_('Initialization of Ledger HW devices is currently disabled.'))
-        return
         dialog = StartBTChipPersoDialog()
         dialog.exec_()
+
+
+        
+        
+        
+        

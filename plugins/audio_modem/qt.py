@@ -5,14 +5,13 @@ from io import BytesIO
 import sys
 import platform
 
-from electrum.plugins import BasePlugin, hook
-from electrum_gui.qt.util import WaitingDialog, EnterButton, WindowModalDialog
-from electrum.util import print_msg, print_error
-from electrum.i18n import _
+from electrum_polis.plugins import BasePlugin, hook
+from electrum_polis_gui.qt.util import WaitingDialog, EnterButton, WindowModalDialog
+from electrum_polis.util import print_msg, print_error
+from electrum_polis.i18n import _
 
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import (QComboBox, QGridLayout, QLabel, QPushButton)
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 
 try:
     import amodem.audio
@@ -58,7 +57,7 @@ class Plugin(BasePlugin):
             self.modem_config = amodem.config.bitrates[bitrate]
 
         combo = QComboBox()
-        combo.addItems([str(x) for x in bitrates])
+        combo.addItems(map(str, bitrates))
         combo.currentIndexChanged.connect(_index_changed)
         layout.addWidget(combo, 0, 1)
 
@@ -103,7 +102,7 @@ class Plugin(BasePlugin):
                 amodem.main.send(config=self.modem_config, src=src, dst=dst)
 
         print_msg('Sending:', repr(blob))
-        blob = zlib.compress(blob.encode('ascii'))
+        blob = zlib.compress(blob)
 
         kbps = self.modem_config.modem_bps / 1e3
         msg = 'Sending to Audio MODEM ({0:.1f} kbps)...'.format(kbps)
@@ -119,7 +118,7 @@ class Plugin(BasePlugin):
 
         def on_finished(blob):
             if blob:
-                blob = zlib.decompress(blob).decode('ascii')
+                blob = zlib.decompress(blob)
                 print_msg('Received:', repr(blob))
                 parent.setText(blob)
 

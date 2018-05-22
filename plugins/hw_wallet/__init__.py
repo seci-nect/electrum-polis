@@ -1,3 +1,1 @@
-
-from .plugin import HW_PluginBase
-from .cmdline import CmdLineHandler
+from plugin import HW_PluginBase

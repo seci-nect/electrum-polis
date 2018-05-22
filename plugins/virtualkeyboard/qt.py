@@ -1,11 +1,10 @@
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import (QVBoxLayout, QGridLayout, QPushButton)
-from electrum.plugins import BasePlugin, hook
-from electrum.i18n import _
+from PyQt4.QtGui import *
+from electrum_polis.plugins import BasePlugin, hook
+from electrum_polis.i18n import _
 import random
 
-
 class Plugin(BasePlugin):
+
     vkb = None
     vkb_index = 0
 
@@ -26,7 +25,7 @@ class Plugin(BasePlugin):
         self.vkb_index += 1
 
     def virtual_keyboard(self, i, pw):
-        i = i % 3
+        i = i%3
         if i == 0:
             chars = 'abcdefghijklmnopqrstuvwxyz '
         elif i == 1:
@@ -36,9 +35,9 @@ class Plugin(BasePlugin):
 
         n = len(chars)
         s = []
-        for i in range(n):
+        for i in xrange(n):
             while True:
-                k = random.randint(0, n - 1)
+                k = random.randint(0,n-1)
                 if k not in s:
                     s.append(k)
                     break
@@ -54,7 +53,7 @@ class Plugin(BasePlugin):
             l_button.setFixedWidth(25)
             l_button.setFixedHeight(25)
             l_button.clicked.connect(add_target(chars[s[i]]))
-            grid.addWidget(l_button, i // 6, i % 6)
+            grid.addWidget(l_button, i/6, i%6)
 
         vbox.addLayout(grid)
 

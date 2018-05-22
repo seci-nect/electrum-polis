@@ -23,14 +23,18 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import re
 import platform
+from decimal import Decimal
+from urllib import quote
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QLabel, QWidget
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
+import PyQt4.QtCore as QtCore
+import PyQt4.QtGui as QtGui
 
-from electrum_gui.qt.qrcodewidget import QRCodeWidget
-from electrum.i18n import _
+from electrum_polis_gui.qt.qrcodewidget import QRCodeWidget
+from electrum_polis.i18n import _
 
 if platform.system() == 'Windows':
     MONOSPACE_FONT = 'Lucida Console'
@@ -51,7 +55,7 @@ class QR_Window(QWidget):
         self.address = ''
         self.label = ''
         self.amount = 0
-        self.setFocusPolicy(Qt.NoFocus)
+        self.setFocusPolicy(QtCore.Qt.NoFocus)
 
         main_box = QHBoxLayout()
 

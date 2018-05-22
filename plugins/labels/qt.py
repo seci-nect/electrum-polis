@@ -1,29 +1,22 @@
 from functools import partial
-import traceback
-import sys
 
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import (QHBoxLayout, QLabel, QVBoxLayout)
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 
-from electrum.plugins import hook
-from electrum.i18n import _
-from electrum_gui.qt import EnterButton
-from electrum_gui.qt.util import ThreadedButton, Buttons
-from electrum_gui.qt.util import WindowModalDialog, OkButton
+from electrum_polis.plugins import hook
+from electrum_polis.i18n import _
+from electrum_polis_gui.qt import EnterButton
+from electrum_polis_gui.qt.util import ThreadedButton, Buttons
+from electrum_polis_gui.qt.util import WindowModalDialog, OkButton
 
-from .labels import LabelsPlugin
-
-
-class QLabelsSignalObject(QObject):
-    labels_changed_signal = pyqtSignal(object)
+from labels import LabelsPlugin
 
 
 class Plugin(LabelsPlugin):
 
     def __init__(self, *args):
         LabelsPlugin.__init__(self, *args)
-        self.obj = QLabelsSignalObject()
+        self.obj = QObject()
 
     def requires_settings(self):
         return True
@@ -39,12 +32,10 @@ class Plugin(LabelsPlugin):
         hbox.addWidget(QLabel("Label sync options:"))
         upload = ThreadedButton("Force upload",
                                 partial(self.push_thread, wallet),
-                                partial(self.done_processing_success, d),
-                                partial(self.done_processing_error, d))
+                                partial(self.done_processing, d))
         download = ThreadedButton("Force download",
                                   partial(self.pull_thread, wallet, True),
-                                  partial(self.done_processing_success, d),
-                                  partial(self.done_processing_error, d))
+                                  partial(self.done_processing, d))
         vbox = QVBoxLayout()
         vbox.addWidget(upload)
         vbox.addWidget(download)
@@ -56,22 +47,15 @@ class Plugin(LabelsPlugin):
         return bool(d.exec_())
 
     def on_pulled(self, wallet):
-        self.obj.labels_changed_signal.emit(wallet)
+        self.obj.emit(SIGNAL('labels_changed'), wallet)
 
-    def done_processing_success(self, dialog, result):
+    def done_processing(self, dialog, result):
         dialog.show_message(_("Your labels have been synchronised."))
 
-    def done_processing_error(self, dialog, result):
-        traceback.print_exception(*result, file=sys.stderr)
-        dialog.show_error(_("Error synchronising labels") + ':\n' + str(result[:2]))
-
     @hook
-    def load_wallet(self, wallet, window):
-        # FIXME if the user just enabled the plugin, this hook won't be called
-        # as the wallet is already loaded, and hence the plugin will be in
-        # a non-functional state for that window
-        self.obj.labels_changed_signal.connect(window.update_tabs)
-        self.start_wallet(wallet)
+    def on_new_window(self, window):
+        window.connect(window.app, SIGNAL('labels_changed'), window.update_tabs)
+        self.start_wallet(window.wallet)
 
     @hook
     def on_close_window(self, window):

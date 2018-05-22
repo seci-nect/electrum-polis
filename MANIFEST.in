@@ -3,18 +3,13 @@ include README.rst
 include electrum-polis.conf.sample
 include electrum-polis.desktop
 include *.py
-<<<<<<< HEAD
 include electrum-polis
-=======
-include electrum
-include contrib/requirements/requirements.txt
-include contrib/requirements/requirements-hw.txt
->>>>>>> bitcoinElectrum/master
 recursive-include lib *.py
 recursive-include gui *.py
 recursive-include plugins *.py
 recursive-include packages *.py
 recursive-include packages cacert.pem
+include app.fil
 include icons.qrc
 recursive-include icons *
 recursive-include scripts *

@@ -14,8 +14,8 @@ fi
 
 cd electrum-polis
 
-source ./contrib/travis/electrum_version_env.sh;
-echo wine build version is $electrum_VERSION
+source ./contrib/travis/electrum_polis_version_env.sh;
+echo wine build version is $ELECTRUM_POLIS_VERSION
 
 sudo pip2 install \
     dnspython==1.12.0 \
@@ -44,9 +44,9 @@ cp /usr/local/lib/python2.7/site-packages/requests/cacert.pem packages/requests/
 
 pyinstaller \
     -y \
-    --name electrum-polis-$electrum_VERSION.bin \
+    --name electrum-polis-$ELECTRUM_POLIS_VERSION.bin \
     osx.spec
 
 sudo hdiutil create -fs HFS+ -volname "Electrum-POLIS" \
     -srcfolder dist/Electrum-POLIS.app \
-    dist/electrum-polis-$electrum_VERSION-macosx.dmg
+    dist/electrum-polis-$ELECTRUM_POLIS_VERSION-macosx.dmg

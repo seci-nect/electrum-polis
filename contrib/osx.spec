@@ -36,8 +36,8 @@ hiddenimports = [
 
 datas = [
     ('packages/requests/cacert.pem', 'packages/requests'),
-    ('lib/currencies.json', 'electrum'),
-    ('lib/wordlist', 'electrum/wordlist'),
+    ('lib/currencies.json', 'electrum_polis'),
+    ('lib/wordlist', 'electrum_polis/wordlist'),
 ]
 
 # https://github.com/pyinstaller/pyinstaller/wiki/Recipe-remove-tkinter-tcl
@@ -57,14 +57,14 @@ for d in a.datas:
         a.datas.remove(d)
         break
 
-# Add TOC to electrum, electrum_gui, electrum_plugins
+# Add TOC to electrum_polis, electrum_polis_gui, electrum_polis_plugins
 for p in sorted(a.pure):
     if p[0].startswith('lib') and p[2] == 'PYMODULE':
-        a.pure += [('electrum%s' % p[0][3:] , p[1], p[2])]
+        a.pure += [('electrum_polis%s' % p[0][3:] , p[1], p[2])]
     if p[0].startswith('gui') and p[2] == 'PYMODULE':
-        a.pure += [('electrum_gui%s' % p[0][3:] , p[1], p[2])]
+        a.pure += [('electrum_polis_gui%s' % p[0][3:] , p[1], p[2])]
     if p[0].startswith('plugins') and p[2] == 'PYMODULE':
-        a.pure += [('electrum_plugins%s' % p[0][7:] , p[1], p[2])]
+        a.pure += [('electrum_polis_plugins%s' % p[0][7:] , p[1], p[2])]
 
 pyz = PYZ(a.pure)
 
