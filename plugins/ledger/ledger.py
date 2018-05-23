@@ -3,16 +3,16 @@ import hashlib
 import sys
 import traceback
 
-from electrum_dash import bitcoin
-from electrum_dash.bitcoin import (TYPE_ADDRESS, int_to_hex, var_int,
+from electrum_polis import bitcoin
+from electrum_polis.bitcoin import (TYPE_ADDRESS, int_to_hex, var_int,
                                    b58_address_to_hash160,
                                    hash160_to_b58_address, NetworkConstants)
-from electrum_dash.i18n import _
-from electrum_dash.plugins import BasePlugin
-from electrum_dash.keystore import Hardware_KeyStore
-from electrum_dash.transaction import Transaction
+from electrum_polis.i18n import _
+from electrum_polis.plugins import BasePlugin
+from electrum_polis.keystore import Hardware_KeyStore
+from electrum_polis.transaction import Transaction
 from ..hw_wallet import HW_PluginBase
-from electrum_dash.util import print_error, is_verbose, bfh, bh2u
+from electrum_polis.util import print_error, is_verbose, bfh, bh2u
 
 
 def setAlternateCoinVersions(self, regular, p2sh):

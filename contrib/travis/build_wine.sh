@@ -1,12 +1,12 @@
 #!/bin/bash
 
-source ./contrib/travis/electrum_dash_version_env.sh;
-echo wine build version is $ELECTRUM_DASH_VERSION
+source ./contrib/travis/electrum_polis_version_env.sh;
+echo wine build version is $ELECTRUM_POLIS_VERSION
 
-cd $WINEPREFIX/drive_c/electrum-dash
+cd $WINEPREFIX/drive_c/electrum-polis
 
 rm -rf build
-rm -rf dist/electrum-dash
+rm -rf dist/electrum-polis
 
 cp contrib/build-wine/deterministic.spec .
 cp contrib/pyi_runtimehook.py .
@@ -22,7 +22,7 @@ wine pip install keepkey==4.0.2
 wine pip install trezor==0.7.16
 
 wine pyinstaller -y \
-    --name electrum-dash-$ELECTRUM_DASH_VERSION.exe \
+    --name electrum-polis-$ELECTRUM_POLIS_VERSION.exe \
     deterministic.spec
 
 if [[ $WINEARCH == win32 ]]; then
@@ -32,6 +32,6 @@ else
 fi
 
 wine "$NSIS_EXE" /NOCD -V3 \
-    /DPRODUCT_VERSION=$ELECTRUM_DASH_VERSION \
+    /DPRODUCT_VERSION=$ELECTRUM_POLIS_VERSION \
     /DWINEARCH=$WINEARCH \
-    contrib/build-wine/electrum-dash.nsi
+    contrib/build-wine/electrum-polis.nsi

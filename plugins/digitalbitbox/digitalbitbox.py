@@ -4,14 +4,14 @@
 #
 
 try:
-    import electrum_dash
-    from electrum_dash.bitcoin import TYPE_ADDRESS, push_script, var_int, msg_magic, Hash, verify_message, pubkey_from_signature, point_to_ser, public_key_to_p2pkh, EncodeAES, DecodeAES, MyVerifyingKey
-    from electrum_dash.bitcoin import serialize_xpub, deserialize_xpub
-    from electrum_dash.transaction import Transaction
-    from electrum_dash.i18n import _
-    from electrum_dash.keystore import Hardware_KeyStore
+    import electrum_polis
+    from electrum_polis.bitcoin import TYPE_ADDRESS, push_script, var_int, msg_magic, Hash, verify_message, pubkey_from_signature, point_to_ser, public_key_to_p2pkh, EncodeAES, DecodeAES, MyVerifyingKey
+    from electrum_polis.bitcoin import serialize_xpub, deserialize_xpub
+    from electrum_polis.transaction import Transaction
+    from electrum_polis.i18n import _
+    from electrum_polis.keystore import Hardware_KeyStore
     from ..hw_wallet import HW_PluginBase
-    from electrum_dash.util import print_error, to_string, UserCancelled
+    from electrum_polis.util import print_error, to_string, UserCancelled
 
     import time
     import hid
@@ -270,8 +270,8 @@ class DigitalBitbox_Client():
 
     def dbb_generate_wallet(self):
         key = self.stretch_key(self.password)
-        filename = ("Electrum-DASH-" + time.strftime("%Y-%m-%d-%H-%M-%S") + ".pdf").encode('utf8')
-        msg = b'{"seed":{"source": "create", "key": "%s", "filename": "%s", "entropy": "%s"}}' % (key, filename, b'Digital Bitbox Electrum-DASH Plugin')
+        filename = ("Electrum-POLIS-" + time.strftime("%Y-%m-%d-%H-%M-%S") + ".pdf").encode('utf8')
+        msg = b'{"seed":{"source": "create", "key": "%s", "filename": "%s", "entropy": "%s"}}' % (key, filename, b'Digital Bitbox Electrum-POLIS Plugin')
         reply = self.hid_send_encrypt(msg)
         if 'error' in reply:
             raise Exception(reply['error']['message'])

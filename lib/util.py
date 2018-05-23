@@ -40,7 +40,7 @@ def inv_dict(d):
     return {v: k for k, v in d.items()}
 
 
-base_units = {'DASH':8, 'mDASH':5, 'uDASH':2}
+base_units = {'POLIS':8, 'mPOLIS':5, 'uPOLIS':2}
 fee_levels = [_('Within 25 blocks'), _('Within 10 blocks'), _('Within 5 blocks'), _('Within 2 blocks'), _('In the next block')]
 
 def normalize_version(v):
@@ -233,7 +233,7 @@ def android_data_dir():
     return PythonActivity.mActivity.getFilesDir().getPath() + '/data'
 
 def android_headers_dir():
-    d = android_ext_dir() + '/org.dash.electrum.electrum_dash'
+    d = android_ext_dir() + '/org.polis.electrum.electrum_polis'
     if not os.path.exists(d):
         os.mkdir(d)
     return d
@@ -242,7 +242,7 @@ def android_check_data_dir():
     """ if needed, move old directory to sandbox """
     ext_dir = android_ext_dir()
     data_dir = android_data_dir()
-    old_electrum_dir = ext_dir + '/electrum-dash'
+    old_electrum_dir = ext_dir + '/electrum-polis'
     if not os.path.exists(data_dir) and os.path.exists(old_electrum_dir):
         import shutil
         new_headers_path = android_headers_dir() + 'blockchain_headers'
@@ -323,11 +323,11 @@ def user_dir():
     if 'ANDROID_DATA' in os.environ:
         return android_check_data_dir()
     elif os.name == 'posix':
-        return os.path.join(os.environ["HOME"], ".electrum-dash")
+        return os.path.join(os.environ["HOME"], ".electrum-polis")
     elif "APPDATA" in os.environ:
-        return os.path.join(os.environ["APPDATA"], "Electrum-DASH")
+        return os.path.join(os.environ["APPDATA"], "Electrum-POLIS")
     elif "LOCALAPPDATA" in os.environ:
-        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum-DASH")
+        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum-POLIS")
     else:
         #raise Exception("No home directory found in environment variables.")
         return
@@ -427,16 +427,16 @@ def time_difference(distance_in_time, include_seconds):
         return "over %d years" % (round(distance_in_minutes / 525600))
 
 mainnet_block_explorers = {
-    'Dash.org': ('https://explorer.dash.org',
+    'Dash.org': ('https://explorer.polis.org',
                        {'tx': 'tx', 'addr': 'address'}),
-    'Bchain.info': ('https://bchain.info/DASH',
+    'Bchain.info': ('https://bchain.info/POLIS',
                        {'tx': 'tx', 'addr': 'addr'}),
     'system default': ('blockchain:',
                        {'tx': 'tx', 'addr': 'address'}),
 }
 
 testnet_block_explorers = {
-    'Dash.org': ('https://test.insight.dash.siampm.com',
+    'Dash.org': ('https://test.insight.polis.siampm.com',
                        {'tx': 'tx', 'addr': 'address'}),
     'system default': ('blockchain:',
                        {'tx': 'tx', 'addr': 'address'}),
@@ -476,7 +476,7 @@ def parse_URI(uri, on_pr=None):
         return {'address': uri}
 
     u = urllib.parse.urlparse(uri)
-    if u.scheme != 'dash':
+    if u.scheme != 'polis':
         raise BaseException("Not a Dash URI")
     address = u.path
 
@@ -544,7 +544,7 @@ def create_URI(addr, amount, message):
         query.append('amount=%s'%format_satoshis_plain(amount))
     if message:
         query.append('message=%s'%urllib.parse.quote(message))
-    p = urllib.parse.ParseResult(scheme='dash', netloc='', path=addr, params='', query='&'.join(query), fragment='')
+    p = urllib.parse.ParseResult(scheme='polis', netloc='', path=addr, params='', query='&'.join(query), fragment='')
     return urllib.parse.urlunparse(p)
 
 

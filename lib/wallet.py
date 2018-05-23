@@ -1146,7 +1146,7 @@ class Abstract_Wallet(PrintError):
         if not r:
             return
         out = copy.copy(r)
-        out['URI'] = 'dash:' + addr + '?amount=' + format_satoshis(out.get('amount'))
+        out['URI'] = 'polis:' + addr + '?amount=' + format_satoshis(out.get('amount'))
         status, conf = self.get_request_status(addr)
         out['status'] = status
         if conf is not None:

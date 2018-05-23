@@ -464,23 +464,23 @@ QAbstractSpinBox::down-button {
 }
 
 QAbstractSpinBox::up-arrow {
-    image: url(:/icons/dash_upArrow_small.png);
+    image: url(:/icons/polis_upArrow_small.png);
     width: 10px;
     height: 10px;
 }
 
 QAbstractSpinBox::up-arrow:disabled, QAbstractSpinBox::up-arrow:off {
-    image: url(:/icons/dash_upArrow_small_disabled.png);
+    image: url(:/icons/polis_upArrow_small_disabled.png);
 }
 
 QAbstractSpinBox::down-arrow {
-    image: url(:/icons/dash_downArrow_small.png);
+    image: url(:/icons/polis_downArrow_small.png);
     width: 10px;
     height: 10px;
 }
 
 QAbstractSpinBox::down-arrow:disabled, QAbstractSpinBox::down-arrow:off {
-    image: url(:/icons/dash_downArrow_small_disabled.png);
+    image: url(:/icons/polis_downArrow_small_disabled.png);
 }
 
 QSlider::groove:horizontal {

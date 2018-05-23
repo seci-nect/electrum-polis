@@ -2,13 +2,13 @@ import threading
 
 from binascii import hexlify, unhexlify
 
-from electrum_dash.util import bfh, bh2u
-from electrum_dash.bitcoin import (b58_address_to_hash160, xpub_from_pubkey,
+from electrum_polis.util import bfh, bh2u
+from electrum_polis.bitcoin import (b58_address_to_hash160, xpub_from_pubkey,
                               TYPE_ADDRESS, TYPE_SCRIPT, NetworkConstants)
-from electrum_dash.i18n import _
-from electrum_dash.plugins import BasePlugin
-from electrum_dash.transaction import deserialize
-from electrum_dash.keystore import Hardware_KeyStore, is_xpubkey, parse_xpubkey
+from electrum_polis.i18n import _
+from electrum_polis.plugins import BasePlugin
+from electrum_polis.transaction import deserialize
+from electrum_polis.keystore import Hardware_KeyStore, is_xpubkey, parse_xpubkey
 
 from ..hw_wallet import HW_PluginBase
 
