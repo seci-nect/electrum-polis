@@ -52,7 +52,7 @@ DEFAULT_PORTS = {'t':'50127', 's':'50128'}
 #then gradually switch remaining nodes to e-x nodes
 
 DEFAULT_SERVERS = {
-    'electrum1.secipay.org':DEFAULT_PORTS,  # thelazier
+    'electrum1.seci.io':DEFAULT_PORTS,  # thelazier
     # cert verify failed 'electrum-drk.club':DEFAULT_PORTS,         # duffman
 }
 

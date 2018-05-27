@@ -40,14 +40,14 @@ import x11_hash
 
 
 # Seci and bip32, bip44 constants
-# https://github.com/secipay/seci/blob/master/src/chainparams.cpp
-# https://github.com/secipay/seci/ 0.11.0 Release notes for drkp/drkv/DRKP/DRKV
+# https://github.com/seci-coin/seci/blob/master/src/chainparams.cpp
+# https://github.com/seci-coin/seci/ 0.11.0 Release notes for drkp/drkv/DRKP/DRKV
 # https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 TESTNET = False
-ADDRTYPE_P2PKH = 55 # seci adress prefix 55
-ADDRTYPE_P2SH = 56 # seci scripts prefix 56
-WIF = 60 # seci private keys prefix
-
+ADDRTYPE_P2PKH = 63 # seci adress prefix 63
+ADDRTYPE_P2SH = 5 # seci scripts prefix 5
+WIF = 240 # seci private keys prefix
+//todo
 XPRV_HEADER = 0x03e25945
 XPUB_HEADER = 0x03e25d7e
 
@@ -55,7 +55,7 @@ DRKP_HEADER = XPRV_HEADER
 DRKV_HEADER = XPUB_HEADER
 
 HEADERS_URL = ''  # TODO headers bootstrap
-GENESIS = '000009701eb781a8113b1af1d814e2f060f6408a2c990db291bc5108a1345c1e'
+GENESIS = '00000d2e96a48dbbc13255fcfa039a61cf8511567d861543010c0bab630e0018'
 
 
 def set_testnet():
@@ -64,7 +64,7 @@ def set_testnet():
     global TESTNET, HEADERS_URL
     global GENESIS, DRKP_HEADER, DRKV_HEADER
     TESTNET = True
-    ADDRTYPE_P2PKH = 140 # seci dash address start with 140 / y
+    ADDRTYPE_P2PKH = 127 # seci testnet address start with 127
     ADDRTYPE_P2SH = 19
     WIF = 239
     XPRV_HEADER = 0x04358394
@@ -73,7 +73,7 @@ def set_testnet():
     DRKV_HEADER = 0x3a8061a0
     HEADERS_URL = ''  # TODO headers bootstrap
     GENESIS = '0000' + \
-              '009038aeaea86784e959b0b4002793adad39fc9d6f8789ed2edf99ad5c8b'
+              '00000dbd0851f08eb802e0e822c9475512c04b402f9040b0d7b6bfd1b1356033'
 
 
 
