@@ -4,7 +4,7 @@ Electrum-SECI - Lightweight Seci client
 ::
 
   Licence: MIT Licence
-  Author: Thomas Voegtlin
+  Author: Thomas Voegtlin and Nect
   Language: Python
   Homepage: https://electrum-seci.org/
 
