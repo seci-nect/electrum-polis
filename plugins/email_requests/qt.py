@@ -42,11 +42,11 @@ from PyQt4.QtCore import *
 import PyQt4.QtCore as QtCore
 import PyQt4.QtGui as QtGui
 
-from electrum_polis.plugins import BasePlugin, hook
-from electrum_polis.paymentrequest import PaymentRequest
-from electrum_polis.i18n import _
-from electrum_polis_gui.qt.util import EnterButton, Buttons, CloseButton
-from electrum_polis_gui.qt.util import OkButton, WindowModalDialog
+from electrum_seci.plugins import BasePlugin, hook
+from electrum_seci.paymentrequest import PaymentRequest
+from electrum_seci.i18n import _
+from electrum_seci_gui.qt.util import EnterButton, Buttons, CloseButton
+from electrum_seci_gui.qt.util import OkButton, WindowModalDialog
 
 
 
@@ -75,7 +75,7 @@ class Processor(threading.Thread):
                 p = [p]
                 continue
             for item in p:
-                if item.get_content_type() == "application/polis-paymentrequest":
+                if item.get_content_type() == "application/seci-paymentrequest":
                     pr_str = item.get_payload()
                     pr_str = base64.b64decode(pr_str)
                     self.on_receive(pr_str)
@@ -94,10 +94,10 @@ class Processor(threading.Thread):
         msg['Subject'] = message
         msg['To'] = recipient
         msg['From'] = self.username
-        part = MIMEBase('application', "polis-paymentrequest")
+        part = MIMEBase('application', "seci-paymentrequest")
         part.set_payload(payment_request)
         Encoders.encode_base64(part)
-        part.add_header('Content-Disposition', 'attachment; filename="payreq.polis"')
+        part.add_header('Content-Disposition', 'attachment; filename="payreq.seci"')
         msg.attach(part)
         s = smtplib.SMTP_SSL(self.imap_server, timeout=2)
         s.login(self.username, self.password)
@@ -142,7 +142,7 @@ class Plugin(BasePlugin):
         menu.addAction(_("Send via e-mail"), lambda: self.send(window, addr))
 
     def send(self, window, addr):
-        from electrum_polis import paymentrequest
+        from electrum_seci import paymentrequest
         r = window.wallet.receive_requests.get(addr)
         message = r.get('memo', '')
         if r.get('signature'):

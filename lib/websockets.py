@@ -125,7 +125,7 @@ class WebSocketServer(threading.Thread):
         t.start()
 
         host = self.config.get('websocket_server')
-        port = self.config.get('websocket_port', 24126)
+        port = self.config.get('websocket_port', 9829)
         certfile = self.config.get('ssl_chain')
         keyfile = self.config.get('ssl_privkey')
         self.server = SimpleSSLWebSocketServer(host, port, ElectrumWebSocket, certfile, keyfile)

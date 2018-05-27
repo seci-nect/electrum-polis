@@ -7,15 +7,15 @@ import traceback
 from decimal import Decimal
 import threading
 
-import electrum_polis
-from electrum_polis.bitcoin import TYPE_ADDRESS
-from electrum_polis import WalletStorage, Wallet
-from electrum_polis_gui.kivy.i18n import _
-from electrum_polis.paymentrequest import InvoiceStore
-from electrum_polis.util import profiler, InvalidPassword
-from electrum_polis.plugins import run_hook
-from electrum_polis.util import format_satoshis, format_satoshis_plain
-from electrum_polis.paymentrequest import PR_UNPAID, PR_PAID, PR_UNKNOWN, PR_EXPIRED
+import electrum_seci
+from electrum_seci.bitcoin import TYPE_ADDRESS
+from electrum_seci import WalletStorage, Wallet
+from electrum_seci_gui.kivy.i18n import _
+from electrum_seci.paymentrequest import InvoiceStore
+from electrum_seci.util import profiler, InvalidPassword
+from electrum_seci.plugins import run_hook
+from electrum_seci.util import format_satoshis, format_satoshis_plain
+from electrum_seci.paymentrequest import PR_UNPAID, PR_PAID, PR_UNKNOWN, PR_EXPIRED
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -31,10 +31,10 @@ from kivy.lang import Builder
 
 # lazy imports for factory so that widgets can be used in kv
 Factory.register('InstallWizard',
-                 module='electrum_polis_gui.kivy.uix.dialogs.installwizard')
-Factory.register('InfoBubble', module='electrum_polis_gui.kivy.uix.dialogs')
-Factory.register('OutputList', module='electrum_polis_gui.kivy.uix.dialogs')
-Factory.register('OutputItem', module='electrum_polis_gui.kivy.uix.dialogs')
+                 module='electrum_seci_gui.kivy.uix.dialogs.installwizard')
+Factory.register('InfoBubble', module='electrum_seci_gui.kivy.uix.dialogs')
+Factory.register('OutputList', module='electrum_seci_gui.kivy.uix.dialogs')
+Factory.register('OutputItem', module='electrum_seci_gui.kivy.uix.dialogs')
 
 
 #from kivy.core.window import Window
@@ -55,7 +55,7 @@ from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.label import Label
 from kivy.core.clipboard import Clipboard
 
-Factory.register('TabbedCarousel', module='electrum_polis_gui.kivy.uix.screens')
+Factory.register('TabbedCarousel', module='electrum_seci_gui.kivy.uix.screens')
 
 # Register fonts without this you won't be able to use bold/italic...
 # inside markup.
@@ -67,7 +67,7 @@ Label.register('Roboto',
                'gui/kivy/data/fonts/Roboto-Bold.ttf')
 
 
-from electrum_polis.util import base_units
+from electrum_seci.util import base_units
 
 
 class ElectrumWindow(App):
@@ -95,7 +95,7 @@ class ElectrumWindow(App):
         from uix.dialogs.choice_dialog import ChoiceDialog
         protocol = 's'
         def cb2(host):
-            from electrum_polis.network import DEFAULT_PORTS
+            from electrum_seci.network import DEFAULT_PORTS
             pp = servers.get(host, DEFAULT_PORTS)
             port = pp.get(protocol, '')
             popup.ids.host.text = host
@@ -128,7 +128,7 @@ class ElectrumWindow(App):
         self.send_screen.set_URI(uri)
 
     def on_new_intent(self, intent):
-        if intent.getScheme() != 'polis':
+        if intent.getScheme() != 'seci':
             return
         uri = intent.getDataString()
         self.set_URI(uri)
@@ -150,7 +150,7 @@ class ElectrumWindow(App):
         self._trigger_update_history()
 
     def _get_bu(self):
-        return self.electrum_config.get('base_unit', 'mPOLIS')
+        return self.electrum_config.get('base_unit', 'mSECI')
 
     def _set_bu(self, value):
         assert value in base_units.keys()
@@ -237,7 +237,7 @@ class ElectrumWindow(App):
 
         super(ElectrumWindow, self).__init__(**kwargs)
 
-        title = _('Electrum-POLIS App')
+        title = _('Electrum-SECI App')
         self.electrum_config = config = kwargs.get('config', None)
         self.language = config.get('language', 'en')
 
@@ -291,16 +291,16 @@ class ElectrumWindow(App):
             self.send_screen.do_clear()
 
     def on_qr(self, data):
-        from electrum_polis.bitcoin import base_decode, is_address
+        from electrum_seci.bitcoin import base_decode, is_address
         data = data.strip()
         if is_address(data):
             self.set_URI(data)
             return
-        if data.startswith('polis:'):
+        if data.startswith('seci:'):
             self.set_URI(data)
             return
         # try to decode transaction
-        from electrum_polis.transaction import Transaction
+        from electrum_seci.transaction import Transaction
         try:
             text = base_decode(data, None, base=43).encode('hex')
             tx = Transaction(text)
@@ -337,7 +337,7 @@ class ElectrumWindow(App):
         self.receive_screen.screen.address = addr
 
     def show_pr_details(self, req, status, is_invoice):
-        from electrum_polis.util import format_time
+        from electrum_seci.util import format_time
         requestor = req.get('requestor')
         exp = req.get('exp')
         memo = req.get('memo')
@@ -447,7 +447,7 @@ class ElectrumWindow(App):
         self.fiat_unit = self.fx.ccy if self.fx.is_enabled() else ''
         # default tab
         self.switch_to('history')
-        # bind intent for polis: URI scheme
+        # bind intent for seci: URI scheme
         if platform == 'android':
             from android import activity
             from jnius import autoclass
@@ -490,7 +490,7 @@ class ElectrumWindow(App):
                 self.load_wallet(wallet)
                 self.on_resume()
         else:
-            Logger.debug('Electrum-POLIS: Wallet not found. Launching install wizard')
+            Logger.debug('Electrum-SECI: Wallet not found. Launching install wizard')
             storage = WalletStorage(path)
             wizard = Factory.InstallWizard(self.electrum_config, storage)
             wizard.bind(on_wizard_complete=self.on_wizard_complete)
@@ -565,9 +565,9 @@ class ElectrumWindow(App):
 
         #setup lazy imports for mainscreen
         Factory.register('AnimatedPopup',
-                         module='electrum_polis_gui.kivy.uix.dialogs')
+                         module='electrum_seci_gui.kivy.uix.dialogs')
         Factory.register('QRCodeWidget',
-                         module='electrum_polis_gui.kivy.uix.qrcodewidget')
+                         module='electrum_seci_gui.kivy.uix.qrcodewidget')
 
         # preload widgets. Remove this if you want to load the widgets on demand
         #Cache.append('electrum_widgets', 'AnimatedPopup', Factory.AnimatedPopup())
@@ -582,7 +582,7 @@ class ElectrumWindow(App):
         self.invoices_screen = None
         self.receive_screen = None
         self.requests_screen = None
-        self.icon = "icons/electrum-polis.png"
+        self.icon = "icons/electrum-seci.png"
         self.tabs = self.root.ids['tabs']
 
     def update_interfaces(self, dt):
@@ -671,8 +671,8 @@ class ElectrumWindow(App):
                 from plyer import notification
             icon = (os.path.dirname(os.path.realpath(__file__))
                     + '/../../' + self.icon)
-            notification.notify('Electrum-POLIS', message,
-                            app_icon=icon, app_name='Electrum-POLIS')
+            notification.notify('Electrum-SECI', message,
+                            app_icon=icon, app_name='Electrum-SECI')
         except ImportError:
             Logger.Error('Notification: needs plyer; `sudo pip install plyer`')
 

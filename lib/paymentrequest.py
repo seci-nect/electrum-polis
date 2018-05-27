@@ -50,14 +50,14 @@ import rsakey
 from bitcoin import TYPE_ADDRESS
 
 REQUEST_HEADERS = {
-    'Accept': 'application/polis-paymentrequest',
-    'User-Agent': 'Electrum-POLIS',
+    'Accept': 'application/seci-paymentrequest',
+    'User-Agent': 'Electrum-SECI',
 }
 
 ACK_HEADERS = {
-    'Content-Type': 'application/polis-payment',
-    'Accept': 'application/polis-paymentack',
-    'User-Agent': 'Electrum-POLIS'
+    'Content-Type': 'application/seci-payment',
+    'Accept': 'application/seci-paymentack',
+    'User-Agent': 'Electrum-SECI'
 }
 
 ca_path = requests.certs.where()
@@ -88,7 +88,7 @@ def get_payment_request(url):
             response.raise_for_status()
             # Guard against `bitcoin:`-URIs with invalid payment request URLs
             if "Content-Type" not in response.headers \
-            or response.headers["Content-Type"] != "application/polis-paymentrequest":
+            or response.headers["Content-Type"] != "application/seci-paymentrequest":
                 data = None
                 error = "payment URL not pointing to a payment request handling server"
             else:
@@ -280,7 +280,7 @@ class PaymentRequest:
 
         ref_out = paymnt.refund_to.add()
         ref_out.script = transaction.Transaction.pay_script(TYPE_ADDRESS, refund_addr)
-        paymnt.memo = "Paid using Electrum-POLIS"
+        paymnt.memo = "Paid using Electrum-SECI"
         pm = paymnt.SerializeToString()
 
         payurl = urlparse.urlparse(pay_det.payment_url)

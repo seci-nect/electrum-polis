@@ -36,22 +36,22 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import PyQt4.QtCore as QtCore
 
-from electrum_polis.i18n import _, set_language
-from electrum_polis.plugins import run_hook
-from electrum_polis import SimpleConfig, Wallet, WalletStorage
-from electrum_polis.synchronizer import Synchronizer
-from electrum_polis.verifier import SPV
-from electrum_polis.util import DebugMem, UserCancelled, InvalidPassword
-from electrum_polis.wallet import Abstract_Wallet
+from electrum_seci.i18n import _, set_language
+from electrum_seci.plugins import run_hook
+from electrum_seci import SimpleConfig, Wallet, WalletStorage
+from electrum_seci.synchronizer import Synchronizer
+from electrum_seci.verifier import SPV
+from electrum_seci.util import DebugMem, UserCancelled, InvalidPassword
+from electrum_seci.wallet import Abstract_Wallet
 from installwizard import InstallWizard, GoBack
-from polis_style import polis_stylesheet
+from seci_style import seci_stylesheet
 
 
 try:
     import icons_rc
 except Exception:
     print "Error: Could not find icons file."
-    print "Please run 'pyrcc4 icons.qrc -o gui/qt/icons_rc.py', and reinstall Electrum-POLIS"
+    print "Please run 'pyrcc4 icons.qrc -o gui/qt/icons_rc.py', and reinstall Electrum-SECI"
     sys.exit(1)
 
 from util import *   # * needed for plugins
@@ -87,13 +87,13 @@ class ElectrumGui:
         self.efilter = OpenFileEventFilter(self.windows)
         self.app = QApplication(sys.argv)
         self.app.installEventFilter(self.efilter)
-        self.app.setStyleSheet(polis_stylesheet)
+        self.app.setStyleSheet(seci_stylesheet)
         self.timer = Timer()
         self.nd = None
         # init tray
         self.dark_icon = self.config.get("dark_icon", False)
         self.tray = QSystemTrayIcon(self.tray_icon(), None)
-        self.tray.setToolTip('Electrum-POLIS')
+        self.tray.setToolTip('Electrum-SECI')
         self.tray.activated.connect(self.tray_activated)
         self.build_tray_menu()
         self.tray.show()
@@ -110,7 +110,7 @@ class ElectrumGui:
             submenu.addAction(_("Close"), window.close)
         m.addAction(_("Dark/Light"), self.toggle_tray_icon)
         m.addSeparator()
-        m.addAction(_("Exit Electrum-POLIS"), self.close)
+        m.addAction(_("Exit Electrum-SECI"), self.close)
         self.tray.setContextMenu(m)
 
     def tray_icon(self):

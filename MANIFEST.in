@@ -1,9 +1,9 @@
 include LICENCE RELEASE-NOTES AUTHORS
 include README.rst
-include electrum-polis.conf.sample
-include electrum-polis.desktop
+include electrum-seci.conf.sample
+include electrum-seci.desktop
 include *.py
-include electrum-polis
+include electrum-seci
 recursive-include lib *.py
 recursive-include gui *.py
 recursive-include plugins *.py

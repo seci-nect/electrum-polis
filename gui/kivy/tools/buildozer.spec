@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = Electrum-POLIS
+title = Electrum-SECI
 
 # (str) Package name
-package.name = Electrum-POLIS
+package.name = Electrum-SECI
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.electrum_polis.electrum_polis_develop
+package.domain = org.electrum_seci.electrum_seci_develop
 
 # (str) Source code where the main.py live
 source.dir = .

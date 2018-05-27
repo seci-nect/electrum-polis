@@ -5,11 +5,11 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import PyQt4.QtCore as QtCore
 
-import electrum_polis
-from electrum_polis import Wallet, WalletStorage
-from electrum_polis.util import UserCancelled, InvalidPassword
-from electrum_polis.base_wizard import BaseWizard
-from electrum_polis.i18n import _
+import electrum_seci
+from electrum_seci import Wallet, WalletStorage
+from electrum_seci.util import UserCancelled, InvalidPassword
+from electrum_seci.base_wizard import BaseWizard
+from electrum_seci.i18n import _
 
 from seed_dialog import SeedLayout, KeysLayout
 from network_dialog import NetworkChoiceLayout
@@ -20,9 +20,9 @@ from password_dialog import PasswordLayout, PW_NEW
 class GoBack(Exception):
     pass
 
-MSG_GENERATING_WAIT = _("Electrum-POLIS is generating your addresses, please wait...")
+MSG_GENERATING_WAIT = _("Electrum-SECI is generating your addresses, please wait...")
 MSG_ENTER_ANYTHING = _("Please enter a seed phrase, a master key, a list of "
-                       "Polis addresses, or a list of private keys")
+                       "Seci addresses, or a list of private keys")
 MSG_ENTER_SEED_OR_MPK = _("Please enter a seed phrase or a master key (xpub or xprv):")
 MSG_COSIGNER = _("Please enter the master public key of cosigner #%d:")
 MSG_ENTER_PASSWORD = _("Choose a password to encrypt your wallet keys.") + '\n'\
@@ -98,7 +98,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
     def __init__(self, config, app, plugins, storage):
         BaseWizard.__init__(self, config, storage)
         QDialog.__init__(self, None)
-        self.setWindowTitle('Electrum-POLIS  -  ' + _('Install Wizard'))
+        self.setWindowTitle('Electrum-SECI  -  ' + _('Install Wizard'))
         self.app = app
         self.config = config
         # Set for base base class
@@ -138,7 +138,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         hbox.setStretchFactor(inner_vbox, 1)
         outer_vbox.addLayout(hbox)
         outer_vbox.addLayout(Buttons(self.back_button, self.next_button))
-        self.set_icon(':icons/electrum-polis.png')
+        self.set_icon(':icons/electrum-seci.png')
         self.show()
         self.raise_()
         self.refresh_gui()  # Need for QT on MacOSX.  Lame.
@@ -165,7 +165,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         hbox2.addWidget(self.pw_e)
         hbox2.addStretch()
         vbox.addLayout(hbox2)
-        self.set_layout(vbox, title=_('Electrum-POLIS wallet'))
+        self.set_layout(vbox, title=_('Electrum-SECI wallet'))
 
         wallet_folder = os.path.dirname(self.storage.path)
 
@@ -232,7 +232,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         path = self.storage.path
         if self.storage.requires_split():
             self.hide()
-            msg = _("The wallet '%s' contains multiple accounts, which are no longer supported in Electrum-POLIS 2.7.\n\n"
+            msg = _("The wallet '%s' contains multiple accounts, which are no longer supported in Electrum-SECI 2.7.\n\n"
                     "Do you want to split your wallet into multiple files?"%path)
             if not self.question(msg):
                 return
@@ -245,7 +245,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
 
         if self.storage.requires_upgrade():
             self.hide()
-            msg = _("The format of your wallet '%s' must be upgraded for Electrum-POLIS. This change will not be backward compatible"%path)
+            msg = _("The format of your wallet '%s' must be upgraded for Electrum-SECI. This change will not be backward compatible"%path)
             if not self.question(msg):
                 return
             self.storage.upgrade()
@@ -482,10 +482,10 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         return None
 
     def init_network(self, network):
-        message = _("Electrum-POLIS communicates with remote servers to get "
+        message = _("Electrum-SECI communicates with remote servers to get "
                   "information about your transactions and addresses. The "
                   "servers all fulfil the same purpose only differing in "
-                  "hardware. In most cases you simply want to let Electrum-POLIS "
+                  "hardware. In most cases you simply want to let Electrum-SECI "
                   "pick one at random.  However if you prefer feel free to "
                   "select a server manually.")
         choices = [_("Auto connect"), _("Select server manually")]

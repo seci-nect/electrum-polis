@@ -1,4 +1,4 @@
-Electrum-POLIS - Lightweight Polis client
+Electrum-SECI - Lightweight Seci client
 =====================================
 
 ::
@@ -6,11 +6,11 @@ Electrum-POLIS - Lightweight Polis client
   Licence: MIT Licence
   Author: Thomas Voegtlin
   Language: Python
-  Homepage: https://electrum-polis.org/
+  Homepage: https://electrum-seci.org/
 
 
-.. image:: https://travis-ci.org/akhavr/electrum-polis.svg?branch=develop
-    :target: https://travis-ci.org/akhavr/electrum-polis
+.. image:: https://travis-ci.org/akhavr/electrum-seci.svg?branch=develop
+    :target: https://travis-ci.org/akhavr/electrum-seci
     :alt: Build Status
 
 
@@ -20,27 +20,27 @@ Electrum-POLIS - Lightweight Polis client
 Getting started
 ===============
 
-Electrum-POLIS is a pure python application. If you want to use the
+Electrum-SECI is a pure python application. If you want to use the
 Qt interface, install the Qt dependencies::
 
     sudo apt-get install python-qt4
 
 If you downloaded the official package (tar.gz), you can run
-Electrum-POLIS from its root directory, without installing it on your
+Electrum-SECI from its root directory, without installing it on your
 system; all the python dependencies are included in the 'packages'
-directory. To run Electrum-POLIS from its root directory, just do::
+directory. To run Electrum-SECI from its root directory, just do::
 
-    ./electrum-polis
+    ./electrum-seci
 
-You can also install Electrum-POLIS on your system, by running this command::
+You can also install Electrum-SECI on your system, by running this command::
 
     python setup.py install
 
 This will download and install the Python dependencies used by
-Electrum-POLIS, instead of using the 'packages' directory.
+Electrum-SECI, instead of using the 'packages' directory.
 
 If you cloned the git repository, you need to compile extra files
-before you can run Electrum-POLIS. Read the next section, "Development
+before you can run Electrum-SECI. Read the next section, "Development
 Version".
 
 
@@ -50,8 +50,8 @@ Development version
 
 Check out the code from Github::
 
-    git clone https://github.com/akhavr/electrum-polis
-    cd electrum-polis
+    git clone https://github.com/akhavr/electrum-seci
+    cd electrum-seci
 
 Run install (this should install dependencies)::
 

@@ -6,11 +6,11 @@ import traceback
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
-from electrum_polis import bitcoin
-from electrum_polis.i18n import _
-from electrum_polis.masternode import MasternodeAnnounce
-from electrum_polis.masternode_manager import parse_masternode_conf
-from electrum_polis.util import PrintError
+from electrum_seci import bitcoin
+from electrum_seci.i18n import _
+from electrum_seci.masternode import MasternodeAnnounce
+from electrum_seci.masternode_manager import parse_masternode_conf
+from electrum_seci.util import PrintError
 
 from masternode_widgets import *
 from masternode_budget_widgets import *

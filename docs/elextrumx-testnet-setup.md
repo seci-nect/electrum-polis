@@ -1,33 +1,33 @@
 # Setup electrumx testnet server with docker
 
-## 1. Setup polisd node with docker
+## 1. Setup secid node with docker
 
-Used docker polisd image has `txindex=1` setting in polis.conf,
+Used docker secid image has `txindex=1` setting in seci.conf,
 which is need by electrumx server.
 
 Create network to link with electrumx server.
 
 ```
-docker network create polis-testnet
+docker network create seci-testnet
 ```
 
-Create volume to store polisd data and settings.
+Create volume to store secid data and settings.
 
 ```
-docker volume create polisd-data-testnet
+docker volume create secid-data-testnet
 ```
 
-Start polisd container.
+Start secid container.
 
 ```
-docker run --restart=always -v polisd-data-testnet:/polis \
-    --name=polisd-node-testnet --net polis-testnet -d \
+docker run --restart=always -v secid-data-testnet:/seci \
+    --name=secid-node-testnet --net seci-testnet -d \
     --env TESTNET=1 \
-    -p 24130:24130 -p 127.0.0.1:19998:19998 zebralucky/polisd:v0.12.2
+    -p 9819:9819 -p 127.0.0.1:19998:19998 zebralucky/secid:v0.12.2
 ```
 
 **Notes**:
- - port 24130 is published without bind to localhost and can be
+ - port 9819 is published without bind to localhost and can be
  accessible from out world even with firewall setup:
  https://github.com/moby/moby/issues/22054
 
@@ -35,17 +35,17 @@ Copy or change RPC password. Random password generated
 on first container startup.
 
 ```
-docker exec -it polisd-node-testnet bash -l
+docker exec -it secid-node-testnet bash -l
 
 # ... login to container
 
-cat .poliscore/polis.conf | grep rpcpassword
+cat .secicore/seci.conf | grep rpcpassword
 ```
 
-See log of polisd.
+See log of secid.
 
 ```
-docker logs polisd-node-testnet
+docker logs secid-node-testnet
 ```
 
 ## 2. Setup electrumx server with docker
@@ -53,18 +53,18 @@ docker logs polisd-node-testnet
 Create volume to store elextrumx server data and settings.
 
 ```
-docker volume create electrumx-polis-data-testnet
+docker volume create electrumx-seci-data-testnet
 ```
 
 Start elextrumx container.
 
 ```
-docker run --restart=always -v electrumx-polis-data-testnet:/data \
-    --name electrumx-polis-testnet --net polis-testnet -d \
-    -p 51001:51001 -p 51002:51002 zebralucky/electrumx-polis:testnet
+docker run --restart=always -v electrumx-seci-data-testnet:/data \
+    --name electrumx-seci-testnet --net seci-testnet -d \
+    -p 51001:51001 -p 51002:51002 zebralucky/electrumx-seci:testnet
 ```
 
-Change DAEMON_URL `rpcpasswd` to password from polisd and creaate SSL cert.
+Change DAEMON_URL `rpcpasswd` to password from secid and creaate SSL cert.
 
 **Notes**:
  - DAEMON_URL as each URL can not contain some symbols.
@@ -73,7 +73,7 @@ Change DAEMON_URL `rpcpasswd` to password from polisd and creaate SSL cert.
  https://github.com/moby/moby/issues/22054
 
 ```
-docker exec -it electrumx-polis-testnet bash -l
+docker exec -it electrumx-seci-testnet bash -l
 
 # ... login to container
 
@@ -98,13 +98,13 @@ exit
 
 # Restart electrumx container to switch on new RPC password
 
-docker restart electrumx-polis-testnet
+docker restart electrumx-seci-testnet
 ```
 
 See log of electrumx server.
 
 ```
-docker exec -it electrumx-polis-testnet bash -l
+docker exec -it electrumx-seci-testnet bash -l
 
 # ... login to container
 
@@ -113,5 +113,5 @@ tail /data/log/current
 # or less /data/log/current
 ```
 
-Wait some time, when electrumx sync with polisd and
+Wait some time, when electrumx sync with secid and
 starts listen on client ports. It can be seen on `/data/log/current`.

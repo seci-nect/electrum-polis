@@ -58,7 +58,7 @@ languages = {
     'lv_LV':_('Latvian'),
     'nl_NL':_('Dutch'),
     'no_NO':_('Norwegian'),
-    'pl_PL':_('Polish'),
+    'pl_PL':_('Secih'),
     'pt_BR':_('Brasilian'),
     'pt_PT':_('Portuguese'),
     'ro_RO':_('Romanian'),

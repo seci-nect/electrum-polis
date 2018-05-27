@@ -1,10 +1,10 @@
 from decimal import Decimal
 _ = lambda x:x
 #from i18n import _
-from electrum_polis import WalletStorage, Wallet
-from electrum_polis.util import format_satoshis, set_verbosity
-from electrum_polis.bitcoin import is_valid, COIN, TYPE_ADDRESS
-from electrum_polis.network import filter_protocol
+from electrum_seci import WalletStorage, Wallet
+from electrum_seci.util import format_satoshis, set_verbosity
+from electrum_seci.bitcoin import is_valid, COIN, TYPE_ADDRESS
+from electrum_seci.network import filter_protocol
 import sys, getpass, datetime
 
 # minimal fdisk like gui for console usage
@@ -17,7 +17,7 @@ class ElectrumGui:
         self.network = daemon.network
         storage = WalletStorage(config.get_wallet_path())
         if not storage.file_exists:
-            print "Wallet not found. try 'electrum-polis create'"
+            print "Wallet not found. try 'electrum-seci create'"
             exit()
         if storage.is_encrypted():
             password = getpass.getpass('Password:', stream=None)
@@ -164,7 +164,7 @@ class ElectrumGui:
 
     def do_send(self):
         if not is_valid(self.str_recipient):
-            print(_('Invalid Polis address'))
+            print(_('Invalid Seci address'))
             return
         try:
             amount = int(Decimal(self.str_amount) * COIN)
@@ -209,12 +209,12 @@ class ElectrumGui:
             print(_('Error'))
 
     def network_dialog(self):
-        print("use 'electrum-polis setconfig server/proxy' to change your network settings")
+        print("use 'electrum-seci setconfig server/proxy' to change your network settings")
         return True
 
 
     def settings_dialog(self):
-        print("use 'electrum-polis setconfig' to change your settings")
+        print("use 'electrum-seci setconfig' to change your settings")
         return True
 
     def password_dialog(self):

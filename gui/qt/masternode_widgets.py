@@ -3,10 +3,10 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
-from electrum_polis import bitcoin
-from electrum_polis.bitcoin import COIN
-from electrum_polis.i18n import _
-from electrum_polis.masternode import NetworkAddress, MasternodeAnnounce
+from electrum_seci import bitcoin
+from electrum_seci.bitcoin import COIN
+from electrum_seci.i18n import _
+from electrum_seci.masternode import NetworkAddress, MasternodeAnnounce
 
 import util
 
@@ -88,11 +88,11 @@ class PrevOutWidget(QWidget):
         super(PrevOutWidget, self).__init__(parent)
         self.vin = {}
         self.hash_edit = QLineEdit()
-        self.hash_edit.setPlaceholderText(_('The TxID of your 1000 POLIS output'))
+        self.hash_edit.setPlaceholderText(_('The TxID of your 1000 SECI output'))
         self.index_edit = QLineEdit()
-        self.index_edit.setPlaceholderText(_('The output number of your 1000 POLIS output'))
+        self.index_edit.setPlaceholderText(_('The output number of your 1000 SECI output'))
         self.address_edit = QLineEdit()
-        self.address_edit.setPlaceholderText(_('The address that 1000 POLIS was sent to'))
+        self.address_edit.setPlaceholderText(_('The address that 1000 SECI was sent to'))
 
         # Collection of fields so that it's easier to act on them all at once.
         self.fields = (self.hash_edit, self.index_edit, self.address_edit)
@@ -192,7 +192,7 @@ class MasternodeEditor(QWidget):
         form = QFormLayout()
         form.addRow(_('Alias:'), self.alias_edit)
         form.addRow(_('Status:'), self.status_edit)
-        form.addRow(_('Collateral POLIS Output:'), self.vin_edit)
+        form.addRow(_('Collateral SECI Output:'), self.vin_edit)
         form.addRow(_('Masternode Private Key:'), self.delegate_key_edit)
         form.addRow(_('Address:'), self.addr_edit)
         form.addRow(_('Protocol Version:'), self.protocol_version_edit)
@@ -283,7 +283,7 @@ class MasternodeOutputsTab(QWidget):
         vbox = QVBoxLayout()
 
         desc = ' '.join(['Use this tab to scan for and choose a collateral payment for your masternode.',
-            'A valid collateral payment is exactly 1000 POLIS.'])
+            'A valid collateral payment is exactly 1000 SECI.'])
         desc = QLabel(_(desc))
         desc.setWordWrap(True)
         vbox.addWidget(desc)
@@ -307,7 +307,7 @@ class MasternodeOutputsTab(QWidget):
         self.setLayout(vbox)
 
     def scan_for_outputs(self, include_frozen):
-        """Scan for 1000 POLIS outputs.
+        """Scan for 1000 SECI outputs.
 
         If one or more is found, populate the list and enable the sign button.
         """
@@ -319,7 +319,7 @@ class MasternodeOutputsTab(QWidget):
         if len(coins) > 0:
             self.valid_outputs_list.add_outputs(coins)
         else:
-            self.status_edit.setText(_('No 1000 POLIS outputs were found.'))
+            self.status_edit.setText(_('No 1000 SECI outputs were found.'))
             self.status_edit.setStyleSheet(util.RED_FG)
 
     def set_output(self, vin):
@@ -395,7 +395,7 @@ class SignAnnounceWidget(QWidget):
 
         form = QFormLayout()
         form.addRow(_('Alias:'), self.alias_edit)
-        form.addRow(_('Collateral POLIS Output:'), self.collateral_edit)
+        form.addRow(_('Collateral SECI Output:'), self.collateral_edit)
         form.addRow(_('Masternode Private Key:'), self.delegate_edit)
         vbox.addLayout(form)
         vbox.addLayout(util.Buttons(self.sign_button))

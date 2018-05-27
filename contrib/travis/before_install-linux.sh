@@ -6,7 +6,7 @@ fi
 
 cd build
 
-docker build -f Dockerfile-linux -t akhavr/electrum-polis-release:Linux .
+docker build -f Dockerfile-linux -t akhavr/electrum-seci-release:Linux .
 ./python-x11_hash-wine.sh
 ./python-trezor-wine.sh
-docker build -f Dockerfile-wine -t akhavr/electrum-polis-release:Wine .
+docker build -f Dockerfile-wine -t akhavr/electrum-seci-release:Wine .

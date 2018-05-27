@@ -1,10 +1,10 @@
 import time
 from struct import pack
 
-from electrum_polis.i18n import _
-from electrum_polis.util import PrintError, UserCancelled
-from electrum_polis.keystore import bip39_normalize_passphrase
-from electrum_polis.bitcoin import serialize_xpub
+from electrum_seci.i18n import _
+from electrum_seci.util import PrintError, UserCancelled
+from electrum_seci.keystore import bip39_normalize_passphrase
+from electrum_seci.bitcoin import serialize_xpub
 
 
 class GuiMixin(object):
@@ -59,7 +59,7 @@ class GuiMixin(object):
             msg = _("Enter a passphrase to generate this wallet.  Each time "
                     "you use this wallet your %s will prompt you for the "
                     "passphrase.  If you forget the passphrase you cannot "
-                    "access the Polis in the wallet.") % self.device
+                    "access the Seci in the wallet.") % self.device
         else:
             msg = _("Enter the passphrase to unlock this wallet:")
         passphrase = self.handler.get_passphrase(msg, self.creating_wallet)

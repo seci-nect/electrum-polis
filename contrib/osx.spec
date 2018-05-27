@@ -36,15 +36,15 @@ hiddenimports = [
 
 datas = [
     ('packages/requests/cacert.pem', 'packages/requests'),
-    ('lib/currencies.json', 'electrum_polis'),
-    ('lib/wordlist', 'electrum_polis/wordlist'),
+    ('lib/currencies.json', 'electrum_seci'),
+    ('lib/wordlist', 'electrum_seci/wordlist'),
 ]
 
 # https://github.com/pyinstaller/pyinstaller/wiki/Recipe-remove-tkinter-tcl
 sys.modules['FixTk'] = None
 excludes = ['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter']
 
-a = Analysis(['electrum-polis'],
+a = Analysis(['electrum-seci'],
              pathex=['plugins'],
              hiddenimports=hiddenimports,
              datas=datas,
@@ -57,14 +57,14 @@ for d in a.datas:
         a.datas.remove(d)
         break
 
-# Add TOC to electrum_polis, electrum_polis_gui, electrum_polis_plugins
+# Add TOC to electrum_seci, electrum_seci_gui, electrum_seci_plugins
 for p in sorted(a.pure):
     if p[0].startswith('lib') and p[2] == 'PYMODULE':
-        a.pure += [('electrum_polis%s' % p[0][3:] , p[1], p[2])]
+        a.pure += [('electrum_seci%s' % p[0][3:] , p[1], p[2])]
     if p[0].startswith('gui') and p[2] == 'PYMODULE':
-        a.pure += [('electrum_polis_gui%s' % p[0][3:] , p[1], p[2])]
+        a.pure += [('electrum_seci_gui%s' % p[0][3:] , p[1], p[2])]
     if p[0].startswith('plugins') and p[2] == 'PYMODULE':
-        a.pure += [('electrum_polis_plugins%s' % p[0][7:] , p[1], p[2])]
+        a.pure += [('electrum_seci_plugins%s' % p[0][7:] , p[1], p[2])]
 
 pyz = PYZ(a.pure)
 
@@ -75,8 +75,8 @@ exe = EXE(pyz,
           strip=False,
           upx=False,
           console=False,
-          icon='icons/electrum-polis.ico',
-          name=os.path.join('build/electrum-polis/electrum-polis', cmdline_name))
+          icon='icons/electrum-seci.ico',
+          name=os.path.join('build/electrum-seci/electrum-seci', cmdline_name))
 
 # trezorctl separate bin
 tctl_a = Analysis(['/usr/local/bin/trezorctl'],
@@ -93,17 +93,17 @@ tctl_exe = EXE(tctl_pyz,
            strip=False,
            upx=False,
            console=True,
-           name=os.path.join('build/electrum-polis/electrum-polis', 'trezorctl.bin'))
+           name=os.path.join('build/electrum-seci/electrum-seci', 'trezorctl.bin'))
 
 coll = COLLECT(exe, tctl_exe,
                a.binaries,
                a.datas,
                strip=False,
                upx=False,
-               name=os.path.join('dist', 'electrum-polis'))
+               name=os.path.join('dist', 'electrum-seci'))
 
 app = BUNDLE(coll,
-             name=os.path.join('dist', 'Electrum-POLIS.app'),
-             appname="Electrum-POLIS",
-	         icon='electrum-polis.icns',
+             name=os.path.join('dist', 'Electrum-SECI.app'),
+             appname="Electrum-SECI",
+	         icon='electrum-seci.icns',
              version = 'ELECTRUM_VERSION')

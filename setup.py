@@ -12,7 +12,7 @@ import argparse
 version = imp.load_source('version', 'lib/version.py')
 
 if sys.version_info[:3] < (2, 7, 0):
-    sys.exit("Error: Electrum-POLIS requires Python version >= 2.7.0...")
+    sys.exit("Error: Electrum-SECI requires Python version >= 2.7.0...")
 
 data_files = []
 
@@ -28,12 +28,12 @@ if platform.system() in ['Linux', 'FreeBSD', 'DragonFly']:
         else:
             usr_share = os.path.expanduser('~/.local/share')
     data_files += [
-        (os.path.join(usr_share, 'applications/'), ['electrum-polis.desktop']),
-        (os.path.join(usr_share, 'pixmaps/'), ['icons/electrum-polis.png'])
+        (os.path.join(usr_share, 'applications/'), ['electrum-seci.desktop']),
+        (os.path.join(usr_share, 'pixmaps/'), ['icons/electrum-seci.png'])
     ]
 
 setup(
-    name="Electrum-POLIS",
+    name="Electrum-SECI",
     version=version.ELECTRUM_VERSION,
     install_requires=[
         'pyaes',
@@ -50,42 +50,42 @@ setup(
     ],
     dependency_links=[
         'git+https://github.com/akhavr/x11_hash@1.4#egg=x11_hash-1.4',
-        'git+https://github.com/electrum-polis/python-trezor@v0.6.13#egg=trezor',
+        'git+https://github.com/electrum-seci/python-trezor@v0.6.13#egg=trezor',
     ],
     packages=[
-        'electrum_polis',
-        'electrum_polis_gui',
-        'electrum_polis_gui.qt',
-        'electrum_polis_plugins',
-        'electrum_polis_plugins.audio_modem',
-        'electrum_polis_plugins.cosigner_pool',
-        'electrum_polis_plugins.email_requests',
-        'electrum_polis_plugins.hw_wallet',
-        'electrum_polis_plugins.keepkey',
-        'electrum_polis_plugins.labels',
-        'electrum_polis_plugins.ledger',
-        'electrum_polis_plugins.trezor',
-        'electrum_polis_plugins.digitalbitbox',
-        'electrum_polis_plugins.virtualkeyboard',
+        'electrum_seci',
+        'electrum_seci_gui',
+        'electrum_seci_gui.qt',
+        'electrum_seci_plugins',
+        'electrum_seci_plugins.audio_modem',
+        'electrum_seci_plugins.cosigner_pool',
+        'electrum_seci_plugins.email_requests',
+        'electrum_seci_plugins.hw_wallet',
+        'electrum_seci_plugins.keepkey',
+        'electrum_seci_plugins.labels',
+        'electrum_seci_plugins.ledger',
+        'electrum_seci_plugins.trezor',
+        'electrum_seci_plugins.digitalbitbox',
+        'electrum_seci_plugins.virtualkeyboard',
     ],
     package_dir={
-        'electrum_polis': 'lib',
-        'electrum_polis_gui': 'gui',
-        'electrum_polis_plugins': 'plugins',
+        'electrum_seci': 'lib',
+        'electrum_seci_gui': 'gui',
+        'electrum_seci_plugins': 'plugins',
     },
     package_data={
-        'electrum_polis': [
+        'electrum_seci': [
             'currencies.json',
             'www/index.html',
             'wordlist/*.txt',
             'locale/*/LC_MESSAGES/electrum.mo',
         ]
     },
-    scripts=['electrum-polis'],
+    scripts=['electrum-seci'],
     data_files=data_files,
-    description="Lightweight Polispay Wallet",
+    description="Lightweight Secipay Wallet",
     author="akhavr",
     license="MIT License",
-    url="https://electrum-polis.org",
-    long_description="""Lightweight Polispay Wallet"""
+    url="https://electrum-seci.org",
+    long_description="""Lightweight Secipay Wallet"""
 )

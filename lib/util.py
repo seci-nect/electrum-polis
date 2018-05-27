@@ -36,7 +36,7 @@ import threading
 import hmac
 from i18n import _
 
-base_units = {'POLIS':8, 'mPOLIS':5, 'uPOLIS':2}
+base_units = {'SECI':8, 'mSECI':5, 'uSECI':2}
 fee_levels = [_('Within 25 blocks'), _('Within 10 blocks'), _('Within 5 blocks'), _('Within 2 blocks'), _('In the next block')]
 
 def normalize_version(v):
@@ -285,7 +285,7 @@ def android_data_dir():
     return PythonActivity.mActivity.getFilesDir().getPath() + '/data'
 
 def android_headers_dir():
-    d = android_ext_dir() + '/org.electrum_polis.electrum_polis'
+    d = android_ext_dir() + '/org.electrum_seci.electrum_seci'
     if not os.path.exists(d):
         os.mkdir(d)
     return d
@@ -294,7 +294,7 @@ def android_check_data_dir():
     """ if needed, move old directory to sandbox """
     ext_dir = android_ext_dir()
     data_dir = android_data_dir()
-    old_electrum_dir = ext_dir + '/electrum-polis'
+    old_electrum_dir = ext_dir + '/electrum-seci'
     if not os.path.exists(data_dir) and os.path.exists(old_electrum_dir):
         import shutil
         new_headers_path = android_headers_dir() + headers_file_name()
@@ -313,11 +313,11 @@ def user_dir():
     if 'ANDROID_DATA' in os.environ:
         return android_check_data_dir()
     elif os.name == 'posix':
-        return os.path.join(os.environ["HOME"], ".electrum-polis")
+        return os.path.join(os.environ["HOME"], ".electrum-seci")
     elif "APPDATA" in os.environ:
-        return os.path.join(os.environ["APPDATA"], "Electrum-POLIS")
+        return os.path.join(os.environ["APPDATA"], "Electrum-SECI")
     elif "LOCALAPPDATA" in os.environ:
-        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum-POLIS")
+        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum-SECI")
     else:
         #raise Exception("No home directory found in environment variables.")
         return
@@ -416,16 +416,16 @@ def time_difference(distance_in_time, include_seconds):
 
 
 mainnet_block_explorers = {
-    'Polis.org': ('https://explorer.polis.org',
+    'Seci.org': ('https://explorer.seci.org',
                        {'tx': 'tx', 'addr': 'address'}),
-    'Bchain.info': ('https://bchain.info/POLIS',
+    'Bchain.info': ('https://bchain.info/SECI',
                        {'tx': 'tx', 'addr': 'addr'}),
     'system default': ('blockchain:',
                        {'tx': 'tx', 'addr': 'address'}),
 }
 
 testnet_block_explorers = {
-    'Polis.org': ('https://test.explorer.polis.org',
+    'Seci.org': ('https://test.explorer.seci.org',
                        {'tx': 'tx', 'addr': 'address'}),
     'system default': ('blockchain:',
                        {'tx': 'tx', 'addr': 'address'}),
@@ -436,7 +436,7 @@ def block_explorer_info():
     return testnet_block_explorers if bitcoin.TESTNET else mainnet_block_explorers
 
 def block_explorer(config):
-    return config.get('block_explorer', 'Polis.org')
+    return config.get('block_explorer', 'Seci.org')
 
 def block_explorer_tuple(config):
     return block_explorer_info().get(block_explorer(config))
@@ -461,12 +461,12 @@ def parse_URI(uri, on_pr=None):
 
     if ':' not in uri:
         if not bitcoin.is_address(uri):
-            raise BaseException("Not a Polis address")
+            raise BaseException("Not a Seci address")
         return {'address': uri}
 
     u = urlparse.urlparse(uri)
-    if u.scheme != 'polis':
-        raise BaseException("Not a Polis URI")
+    if u.scheme != 'seci':
+        raise BaseException("Not a Seci URI")
     address = u.path
 
     # python for android fails to parse query
@@ -483,7 +483,7 @@ def parse_URI(uri, on_pr=None):
     out = {k: v[0] for k, v in pq.items()}
     if address:
         if not bitcoin.is_address(address):
-            raise BaseException("Invalid Polis address:" + address)
+            raise BaseException("Invalid Seci address:" + address)
         out['address'] = address
     if 'amount' in out:
         am = out['amount']
@@ -534,7 +534,7 @@ def create_URI(addr, amount, message):
         if type(message) == unicode:
             message = message.encode('utf8')
         query.append('message=%s'%urllib.quote(message))
-    p = urlparse.ParseResult(scheme='polis', netloc='', path=addr, params='',
+    p = urlparse.ParseResult(scheme='seci', netloc='', path=addr, params='',
                              query='&'.join(query), fragment='')
     return urlparse.urlunparse(p)
 

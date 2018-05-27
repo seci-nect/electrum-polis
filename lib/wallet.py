@@ -1141,7 +1141,7 @@ class Abstract_Wallet(PrintError):
         if not r:
             return
         out = copy.copy(r)
-        out['URI'] = 'polis:' + addr + '?amount=' + util.format_satoshis(out.get('amount'))
+        out['URI'] = 'seci:' + addr + '?amount=' + util.format_satoshis(out.get('amount'))
         status, conf = self.get_request_status(addr)
         out['status'] = status
         if conf is not None:
@@ -1168,7 +1168,7 @@ class Abstract_Wallet(PrintError):
                 if websocket_port_announce:
                     out['websocket_port'] = websocket_port_announce
                 else:
-                    out['websocket_port'] = config.get('websocket_port', 24126)
+                    out['websocket_port'] = config.get('websocket_port', 9829)
         return out
 
     def get_request_status(self, key):
@@ -1285,7 +1285,7 @@ class Abstract_Wallet(PrintError):
     def has_password(self):
         return self.storage.get('use_encryption', False)
 
-    # Polis Abstract_Wallet additions
+    # Seci Abstract_Wallet additions
     def get_delegate_private_key(self, pubkey):
         """Get the private delegate key for pubkey."""
         return self.masternode_delegates.get(pubkey, '')

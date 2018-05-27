@@ -1,6 +1,6 @@
-"""Polis look and feel."""
+"""Seci look and feel."""
 
-polis_stylesheet = """
+seci_stylesheet = """
 
 /* Lite Mode -- cloned from "CleanLook" theme */
 #main_window
@@ -67,7 +67,7 @@ stop: 0 #A5CFFA, stop: 1 #72B2F8);
 
 
 /**********************/
-/* POLIS Evolution CSS */
+/* SECI Evolution CSS */
 /*
 0. OSX Reset
 1. Navigation Bar
@@ -383,7 +383,7 @@ QComboBox::drop-down {
 }
 
 QComboBox::down-arrow {
-    border-image: url(':/icons/polis_downArrow.png') 0 0 0 0 stretch stretch;
+    border-image: url(':/icons/seci_downArrow.png') 0 0 0 0 stretch stretch;
 }
 
 QComboBox QListView {
@@ -565,19 +565,19 @@ QScrollBar:up-arrow, QScrollBar:down-arrow, QScrollBar:left-arrow, QScrollBar:ri
 }
 
 QScrollBar:up-arrow {
-    background-image: url(':/icons/polis_upArrow_small.png');
+    background-image: url(':/icons/seci_upArrow_small.png');
 }
 
 QScrollBar:down-arrow {
-    background-image: url(':/icons/polis_downArrow_small.png');
+    background-image: url(':/icons/seci_downArrow_small.png');
 }
 
 QScrollBar:left-arrow {
-    background-image: url(':/icons/polis_leftArrow_small.png');
+    background-image: url(':/icons/seci_leftArrow_small.png');
 }
 
 QScrollBar:right-arrow {
-    background-image: url(':/icons/polis_rightArrow_small.png');
+    background-image: url(':/icons/seci_rightArrow_small.png');
 }
 
 

@@ -1,6 +1,6 @@
 <RCC>
   <qresource prefix="/" >
-    <file>icons/electrum-polis.png</file>
+    <file>icons/electrum-seci.png</file>
     <file>icons/clock1.png</file>
     <file>icons/clock2.png</file>
     <file>icons/clock3.png</file>
@@ -48,10 +48,10 @@
     <file>icons/warning.png</file>
     <file>icons/zoom.png</file>
     <file>icons/navlogo.png</file>
-    <file>icons/polis_downArrow.png</file>
-    <file>icons/polis_upArrow_small.png</file>
-    <file>icons/polis_downArrow_small.png</file>
-    <file>icons/polis_leftArrow_small.png</file>
-    <file>icons/polis_rightArrow_small.png</file>
+    <file>icons/seci_downArrow.png</file>
+    <file>icons/seci_upArrow_small.png</file>
+    <file>icons/seci_downArrow_small.png</file>
+    <file>icons/seci_leftArrow_small.png</file>
+    <file>icons/seci_rightArrow_small.png</file>
   </qresource>
 </RCC>

@@ -3,9 +3,9 @@ import curses, datetime, locale
 from decimal import Decimal
 import getpass
 
-from electrum_polis.util import format_satoshis, set_verbosity
-from electrum_polis.bitcoin import is_valid, COIN, TYPE_ADDRESS
-from electrum_polis import Wallet, WalletStorage
+from electrum_seci.util import format_satoshis, set_verbosity
+from electrum_seci.bitcoin import is_valid, COIN, TYPE_ADDRESS
+from electrum_seci import Wallet, WalletStorage
 
 _ = lambda x:x
 
@@ -19,7 +19,7 @@ class ElectrumGui:
         self.network = daemon.network
         storage = WalletStorage(config.get_wallet_path())
         if not storage.file_exists:
-            print "Wallet not found. try 'electrum-polis create'"
+            print "Wallet not found. try 'electrum-seci create'"
             exit()
         if storage.is_encrypted():
             password = getpass.getpass('Password:', stream=None)
@@ -310,7 +310,7 @@ class ElectrumGui:
 
     def do_send(self):
         if not is_valid(self.str_recipient):
-            self.show_message(_('Invalid Polis address'))
+            self.show_message(_('Invalid Seci address'))
             return
         try:
             amount = int(Decimal(self.str_amount) * COIN)

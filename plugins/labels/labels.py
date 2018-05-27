@@ -7,9 +7,9 @@ import traceback
 
 import base64
 
-import electrum_polis
-from electrum_polis.plugins import BasePlugin, hook
-from electrum_polis.i18n import _
+import electrum_seci
+from electrum_seci.plugins import BasePlugin, hook
+from electrum_seci.i18n import _
 
 
 
@@ -23,14 +23,14 @@ class LabelsPlugin(BasePlugin):
 
     def encode(self, wallet, msg):
         password, iv, wallet_id = self.wallets[wallet]
-        encrypted = electrum_polis.bitcoin.aes_encrypt_with_iv(password, iv,
+        encrypted = electrum_seci.bitcoin.aes_encrypt_with_iv(password, iv,
                                                          msg.encode('utf8'))
         return base64.b64encode(encrypted)
 
     def decode(self, wallet, message):
         password, iv, wallet_id = self.wallets[wallet]
         decoded = base64.b64decode(message)
-        decrypted = electrum_polis.bitcoin.aes_decrypt_with_iv(password,
+        decrypted = electrum_seci.bitcoin.aes_decrypt_with_iv(password,
                                                               iv, decoded)
         return decrypted.decode('utf8')
 

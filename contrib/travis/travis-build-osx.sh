@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_REPO_URL=https://github.com/akhavr/electrum-polis.git
+BUILD_REPO_URL=https://github.com/akhavr/electrum-seci.git
 
 export PATH="/usr/local/opt/python@2/bin:$PATH"
 export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
@@ -9,13 +9,13 @@ cd build
 if [[ -z $TRAVIS_TAG ]]; then
   exit 0
 else
-  git clone --branch $TRAVIS_TAG $BUILD_REPO_URL electrum-polis
+  git clone --branch $TRAVIS_TAG $BUILD_REPO_URL electrum-seci
 fi
 
-cd electrum-polis
+cd electrum-seci
 
-source ./contrib/travis/electrum_polis_version_env.sh;
-echo wine build version is $ELECTRUM_POLIS_VERSION
+source ./contrib/travis/electrum_seci_version_env.sh;
+echo wine build version is $ELECTRUM_SECI_VERSION
 
 sudo pip2 install \
     dnspython==1.12.0 \
@@ -44,9 +44,9 @@ cp /usr/local/lib/python2.7/site-packages/requests/cacert.pem packages/requests/
 
 pyinstaller \
     -y \
-    --name electrum-polis-$ELECTRUM_POLIS_VERSION.bin \
+    --name electrum-seci-$ELECTRUM_SECI_VERSION.bin \
     osx.spec
 
-sudo hdiutil create -fs HFS+ -volname "Electrum-POLIS" \
-    -srcfolder dist/Electrum-POLIS.app \
-    dist/electrum-polis-$ELECTRUM_POLIS_VERSION-macosx.dmg
+sudo hdiutil create -fs HFS+ -volname "Electrum-SECI" \
+    -srcfolder dist/Electrum-SECI.app \
+    dist/electrum-seci-$ELECTRUM_SECI_VERSION-macosx.dmg

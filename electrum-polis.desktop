@@ -1,17 +1,17 @@
-# If you want electrum-polis to appear in a linux app launcher ("start menu"), install this by doing:
-# sudo desktop-file-install electrum_polis.desktop
+# If you want electrum-seci to appear in a linux app launcher ("start menu"), install this by doing:
+# sudo desktop-file-install electrum_seci.desktop
 
 [Desktop Entry]
-Comment=Lightweight Polispay Client
-Exec=electrum-polis %u
-GenericName[en_US]=Electrum-POLIS
-GenericName=Electrum-POLIS
-Icon=electrum-polis
-Name[en_US]=Electrum Polispay Wallet
-Name=Electrum Polispay Wallet
+Comment=Lightweight Secipay Client
+Exec=electrum-seci %u
+GenericName[en_US]=Electrum-SECI
+GenericName=Electrum-SECI
+Icon=electrum-seci
+Name[en_US]=Electrum Secipay Wallet
+Name=Electrum Secipay Wallet
 Categories=Network;
 StartupNotify=false
 Terminal=false
 Type=Application
-MimeType=x-scheme-handler/polispay;
+MimeType=x-scheme-handler/secipay;
 

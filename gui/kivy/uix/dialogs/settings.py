@@ -3,22 +3,22 @@ from kivy.factory import Factory
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 
-from electrum_polis.util import base_units
-from electrum_polis.i18n import languages
-from electrum_polis_gui.kivy.i18n import _
-from electrum_polis.plugins import run_hook
-from electrum_polis import coinchooser
-from electrum_polis.util import fee_levels
+from electrum_seci.util import base_units
+from electrum_seci.i18n import languages
+from electrum_seci_gui.kivy.i18n import _
+from electrum_seci.plugins import run_hook
+from electrum_seci import coinchooser
+from electrum_seci.util import fee_levels
 
 from choice_dialog import ChoiceDialog
 
 Builder.load_string('''
 #:import partial functools.partial
-#:import _ electrum_polis_gui.kivy.i18n._
+#:import _ electrum_seci_gui.kivy.i18n._
 
 <SettingsDialog@Popup>
     id: settings
-    title: _('Electrum-POLIS Settings')
+    title: _('Electrum-SECI Settings')
     disable_pin: False
     use_encryption: False
     BoxLayout:
@@ -46,13 +46,13 @@ Builder.load_string('''
                 SettingsItem:
                     bu: app.base_unit
                     title: _('Denomination') + ': ' + self.bu
-                    description: _("Base unit for Polis amounts.")
+                    description: _("Base unit for Seci amounts.")
                     action: partial(root.unit_dialog, self)
                 CardSeparator
                 SettingsItem:
                     status: root.fee_status()
                     title: _('Fees') + ': ' + self.status
-                    description: _("Fees paid to the Polis miners.")
+                    description: _("Fees paid to the Seci miners.")
                     action: partial(root.fee_dialog, self)
                 CardSeparator
                 SettingsItem:

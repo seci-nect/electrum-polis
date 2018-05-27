@@ -39,14 +39,14 @@ import pyaes
 import x11_hash
 
 
-# Polis and bip32, bip44 constants
-# https://github.com/polispay/polis/blob/master/src/chainparams.cpp
-# https://github.com/polispay/polis/ 0.11.0 Release notes for drkp/drkv/DRKP/DRKV
+# Seci and bip32, bip44 constants
+# https://github.com/secipay/seci/blob/master/src/chainparams.cpp
+# https://github.com/secipay/seci/ 0.11.0 Release notes for drkp/drkv/DRKP/DRKV
 # https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 TESTNET = False
-ADDRTYPE_P2PKH = 55 # polis adress prefix 55
-ADDRTYPE_P2SH = 56 # polis scripts prefix 56
-WIF = 60 # polis private keys prefix
+ADDRTYPE_P2PKH = 55 # seci adress prefix 55
+ADDRTYPE_P2SH = 56 # seci scripts prefix 56
+WIF = 60 # seci private keys prefix
 
 XPRV_HEADER = 0x03e25945
 XPUB_HEADER = 0x03e25d7e
@@ -64,7 +64,7 @@ def set_testnet():
     global TESTNET, HEADERS_URL
     global GENESIS, DRKP_HEADER, DRKV_HEADER
     TESTNET = True
-    ADDRTYPE_P2PKH = 140 # polis dash address start with 140 / y
+    ADDRTYPE_P2PKH = 140 # seci dash address start with 140 / y
     ADDRTYPE_P2SH = 19
     WIF = 239
     XPRV_HEADER = 0x04358394
